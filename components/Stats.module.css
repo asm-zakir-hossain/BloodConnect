@@ -1,0 +1,80 @@
+/* ============================================================
+   STATS STYLES — Stats.module.css
+   ============================================================ */
+
+/* ---- SECTION WITH GRADIENT BACKGROUND ----
+   linear-gradient creates a smooth color transition.
+   135deg = the gradient angle (top-left to bottom-right).
+   
+   We go from our primary red (#DC3545) through a darker red
+   to a deep crimson. This creates depth and richness.
+*/
+.section {
+  padding: var(--space-16) 0;
+  background: linear-gradient(135deg, #DC3545 0%, #B02A37 50%, #8B1A2B 100%);
+  position: relative;
+}
+
+.statsContainer {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---- STATS GRID ----
+   4 equal columns on desktop, stacking on mobile.
+*/
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-8);
+}
+
+/* ---- INDIVIDUAL STAT ITEM ----
+   All text is white (--text-on-primary) to contrast
+   against the red gradient background.
+*/
+.statItem {
+  text-align: center;
+  color: var(--text-on-primary);
+}
+
+.statIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-4);
+  color: white;
+}
+
+.statNumber {
+  font-size: var(--font-size-3xl);
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: var(--space-2);
+  letter-spacing: -0.02em;
+}
+
+.statLabel {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  opacity: 0.85;
+  letter-spacing: 0.02em;
+}
+
+/* ---- RESPONSIVE ----
+   On tablet: 2 columns. On mobile: 2 columns, smaller text.
+*/
+@media (max-width: 768px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+
+  .statNumber {
+    font-size: var(--font-size-2xl);
+  }
+}

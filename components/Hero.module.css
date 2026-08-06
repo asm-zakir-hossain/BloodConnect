@@ -1,0 +1,282 @@
+/* ============================================================
+   HERO STYLES — Hero.module.css
+   ============================================================ */
+
+/* ---- HERO SECTION CONTAINER ----
+   position: relative = allows child elements with position: absolute
+   to be positioned relative to this container (not the whole page).
+   
+   min-height: 100vh = at least as tall as the entire screen
+   (vh = "viewport height", 100vh = 100% of screen height)
+   
+   overflow: hidden = any decorative blobs that extend outside
+   the hero area get clipped/hidden instead of causing scrollbars.
+   
+   padding-top includes navbar height so content doesn't hide 
+   behind the fixed navbar.
+*/
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-top: var(--navbar-height);
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--bg-primary) 0%, var(--white) 100%);
+}
+
+/* ---- DECORATIVE BACKGROUND BLOBS ----
+   These are soft, colorful circles in the background that give
+   the hero a modern, premium feel (common in SaaS/startup sites).
+   
+   position: absolute = taken out of normal flow, positioned freely
+   border-radius: 50% = makes rectangles into circles
+   filter: blur() = makes them soft and diffused
+   opacity: low value = very subtle, not distracting
+   
+   📚 WHY ARE THEY PURELY DECORATIVE?
+   They're just visual flair. They contain no text or functionality.
+   They make the page look alive and premium instead of flat/boring.
+*/
+.heroBg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none; /* Clicks pass through to content below */
+}
+
+.bgBlob1 {
+  position: absolute;
+  top: -10%;
+  right: -5%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float 8s ease-in-out infinite;
+}
+
+.bgBlob2 {
+  position: absolute;
+  bottom: -20%;
+  left: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255, 107, 107, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float 10s ease-in-out infinite reverse;
+}
+
+.bgBlob3 {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(255, 142, 83, 0.06) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float 12s ease-in-out infinite;
+}
+
+/* ---- HERO CONTENT ----
+   position: relative + z-index: 1 = makes sure text appears
+   ABOVE the decorative blobs (which have no z-index, so default 0).
+   
+   text-align: center = all text centered horizontally.
+*/
+.heroContent {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: var(--space-16) 0;
+  animation: fadeInUp 0.8s ease;
+}
+
+/* ---- HERO BADGE ----
+   The small label above the headline ("Connecting Lives...").
+   
+   display: inline-flex = sits inline but uses flexbox internally
+   so we can center the dot and text side by side.
+*/
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-5);
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  margin-bottom: var(--space-8);
+}
+
+/* The pulsing green dot — indicates "live" status */
+.badgeDot {
+  width: 8px;
+  height: 8px;
+  background: var(--primary);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ---- HERO TITLE ----
+   The main headline. Large, bold, impactful.
+   
+   max-width: 800px + margin: 0 auto = limits width so the text
+   doesn't stretch across the entire screen (hard to read).
+   
+   letter-spacing: -0.03em = slightly tightens letter spacing
+   at large sizes, which looks more professional.
+*/
+.heroTitle {
+  font-size: var(--font-size-3xl);
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.15;
+  max-width: 800px;
+  margin: 0 auto var(--space-6);
+  letter-spacing: -0.03em;
+}
+
+/* The red highlighted text within the title */
+.highlight {
+  color: var(--primary);
+  position: relative;
+}
+
+/* ---- HERO SUBTITLE ----
+   Explanatory text below the headline. Deliberately lighter
+   color and smaller size to create visual hierarchy.
+   
+   📚 WHAT IS VISUAL HIERARCHY?
+   It's the order in which your eyes naturally read content:
+   1. Big, bold headline (catches attention first)
+   2. Medium subtitle (explains the headline)
+   3. Buttons (calls to action)
+   This is achieved through size, weight, and color differences.
+*/
+.heroSubtitle {
+  font-size: var(--font-size-md);
+  color: var(--text-secondary);
+  max-width: 620px;
+  margin: 0 auto var(--space-10);
+  line-height: 1.7;
+}
+
+/* ---- CTA BUTTONS ROW ----
+   flex-wrap: wrap = if screen is too narrow, buttons stack vertically
+   instead of overflowing off-screen.
+*/
+.heroCTA {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-12);
+}
+
+/* Extra styling for the primary CTA button */
+.ctaPrimary {
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--font-size-base);
+}
+
+.ctaSecondary {
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--font-size-base);
+}
+
+/* ---- TRUST INDICATORS ROW ----
+   Shows "1,200+ Donors | 8 Blood Groups | 64 Districts"
+   Builds credibility at first glance.
+*/
+.trustRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  flex-wrap: wrap;
+}
+
+.trustItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.trustNumber {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.trustLabel {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+
+/* The vertical line between trust items */
+.trustDivider {
+  width: 1px;
+  height: 40px;
+  background: var(--border);
+}
+
+/* ============================================================
+   RESPONSIVE STYLES
+   ============================================================ */
+@media (min-width: 768px) {
+  .heroTitle {
+    font-size: var(--font-size-4xl);
+  }
+}
+
+@media (max-width: 640px) {
+  .heroContent {
+    padding: var(--space-10) 0;
+  }
+
+  .heroTitle {
+    font-size: var(--font-size-2xl);
+  }
+
+  .heroSubtitle {
+    font-size: var(--font-size-base);
+  }
+
+  .trustRow {
+    gap: var(--space-6);
+  }
+
+  .trustDivider {
+    display: none; /* Hide dividers on small screens */
+  }
+}
+
+/* Reuse the animations from globals.css */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}

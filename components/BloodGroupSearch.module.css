@@ -1,0 +1,103 @@
+/* ============================================================
+   BLOOD GROUP SEARCH STYLES — BloodGroupSearch.module.css
+   ============================================================ */
+
+.section {
+  padding: var(--space-20) 0;
+  background: var(--bg-primary);
+}
+
+/* ---- BLOOD GROUP GRID ----
+   grid-template-columns: repeat(4, 1fr) = 4 equal columns.
+   On mobile, this switches to 2 columns (see media query below).
+*/
+.groupGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* ---- INDIVIDUAL BLOOD GROUP CARD ----
+   Each card shows the blood type prominently with description below.
+   
+   📚 DESIGN PATTERN: CARD AFFORDANCE
+   "Affordance" means the visual cue that something is clickable.
+   We use:
+   - cursor: pointer (hand icon on hover)
+   - hover elevation (shadow + translateY)
+   - border color change on hover
+   These collectively signal "click me!"
+*/
+.groupCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6) var(--space-4);
+  background: var(--white);
+  border: 2px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  transition: var(--transition-base);
+  cursor: pointer;
+  text-decoration: none;
+  gap: var(--space-1);
+}
+
+.groupCard:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+.groupCard:hover .groupType {
+  color: var(--primary);
+}
+
+/* ---- BLOOD TYPE LABEL ----
+   Large, bold — the most prominent element on each card.
+   This is what the user is scanning for.
+*/
+.groupType {
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  color: var(--text-primary);
+  transition: var(--transition-base);
+  line-height: 1;
+}
+
+/* Short description like "Most Common" or "Universal Donor" */
+.groupDesc {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-top: var(--space-1);
+}
+
+/* Percentage/rarity text */
+.groupRarity {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+
+/* ---- RESPONSIVE ----
+   On mobile: switch from 4 columns to 2 columns.
+   2 columns still fits well on a phone screen, showing
+   blood types in a compact, scannable grid.
+*/
+@media (max-width: 640px) {
+  .groupGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+
+  .groupCard {
+    padding: var(--space-5) var(--space-3);
+  }
+
+  .groupType {
+    font-size: var(--font-size-xl);
+  }
+}

@@ -1,0 +1,130 @@
+/* ============================================================
+   FOOTER STYLES — Footer.module.css
+   ============================================================ */
+
+.footer {
+  background: var(--text-primary);  /* Dark background — near black */
+  color: rgba(255, 255, 255, 0.7);  /* White text at 70% opacity */
+  padding: var(--space-16) 0 var(--space-8);
+}
+
+/* ---- TOP SECTION LAYOUT ----
+   Grid with the brand column on the left (wider)
+   and link columns on the right.
+   
+   grid-template-columns: 1.5fr 2fr
+   = brand column gets 1.5 parts, links get 2 parts of total space.
+   This gives the links section more room.
+*/
+.footerTop {
+  display: grid;
+  grid-template-columns: 1.5fr 2fr;
+  gap: var(--space-12);
+}
+
+/* ---- BRAND SECTION ---- */
+.footerBrand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.logoIcon {
+  display: flex;
+}
+
+.logoText {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--white);
+}
+
+.logoHighlight {
+  color: var(--primary);
+}
+
+.brandDesc {
+  font-size: var(--font-size-sm);
+  line-height: 1.7;
+  max-width: 300px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ---- LINK COLUMNS ----
+   Three columns of links, evenly spaced.
+*/
+.footerLinks {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-8);
+}
+
+.linkColumn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.columnTitle {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: var(--space-2);
+  letter-spacing: 0.02em;
+}
+
+.footerLink {
+  font-size: var(--font-size-sm);
+  color: rgba(255, 255, 255, 0.5);
+  transition: var(--transition-base);
+  text-decoration: none;
+}
+
+.footerLink:hover {
+  color: var(--white);
+}
+
+/* ---- DIVIDER ---- */
+.divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: var(--space-10) 0 var(--space-6);
+}
+
+/* ---- BOTTOM / COPYRIGHT ---- */
+.footerBottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.copyright {
+  font-size: var(--font-size-sm);
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 768px) {
+  .footerTop {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+
+  .footerLinks {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+}
+
+@media (max-width: 480px) {
+  .footerLinks {
+    grid-template-columns: 1fr;
+  }
+}

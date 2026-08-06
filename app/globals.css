@@ -1,0 +1,422 @@
+/* ============================================================
+   BLOODCONNECT — GLOBAL STYLES & DESIGN SYSTEM
+   ============================================================
+   
+   📚 WHAT IS THIS FILE?
+   This is our "design system" — a single file where we define
+   ALL the visual rules for the entire website:
+   - Colors (using CSS custom properties / variables)
+   - Typography (fonts, sizes)
+   - Spacing (margins, paddings)
+   - Reusable component styles
+   
+   📚 WHY CSS CUSTOM PROPERTIES (--variable-name)?
+   Instead of writing color values like #E63946 everywhere,
+   we define them ONCE here as --primary: #E63946;
+   Then use them anywhere as: color: var(--primary);
+   
+   Benefits:
+   1. Change a color in ONE place → updates everywhere
+   2. Easy to add dark mode later
+   3. Consistent design across the whole app
+   ============================================================ */
+
+/* ----- GOOGLE FONTS IMPORT -----
+   We're importing "Inter" — a modern, highly readable sans-serif font
+   designed specifically for screens. Used by GitHub, Linear, Vercel.
+   
+   The numbers (300;400;500;600;700) are "font weights":
+   300 = Light (thin text)
+   400 = Regular (normal body text)
+   500 = Medium (slightly bold)
+   600 = Semi-bold (headings)
+   700 = Bold (strong emphasis)
+*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ----- CSS RESET -----
+   Browsers add their own default styles (margins, paddings, etc.)
+   which differ between Chrome, Firefox, Safari. This "reset"
+   removes those defaults so our design looks the same everywhere.
+   
+   * = "select every single HTML element"
+   box-sizing: border-box = padding/border are INCLUDED in width/height
+   (without this, a 100px box with 10px padding becomes 120px — confusing!)
+*/
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ----- ROOT VARIABLES (DESIGN TOKENS) -----
+   :root means these variables are available EVERYWHERE in the CSS.
+   Think of these as the "settings" for the entire website's look.
+   
+   COLOR PALETTE EXPLANATION:
+   We chose a "clean medical" palette:
+   - Primary Red (#DC3545): Blood/donation theme, but not aggressive.
+     It's a warm, trustworthy red — not a scary emergency red.
+   - Primary Dark (#B02A37): Darker red for hover states
+   - Accent (#FF6B6B): A softer coral-red for highlights
+   - Background (#FAFBFC): Very slightly blue-gray white — easier on
+     the eyes than pure white (#FFFFFF)
+   - Text colors: Dark grays instead of pure black — more elegant
+*/
+:root {
+  /* ---- Primary Colors ---- */
+  --primary: #DC3545;           /* Main red — buttons, links, accents */
+  --primary-dark: #B02A37;      /* Darker red — hover states */
+  --primary-light: #F8D7DA;     /* Very light pink — backgrounds, badges */
+  --primary-glow: rgba(220, 53, 69, 0.15); /* Transparent red — glows, shadows */
+
+  /* ---- Accent Colors ---- */
+  --accent: #FF6B6B;            /* Warm coral — for secondary highlights */
+  --accent-warm: #FF8E53;       /* Orange — for gradients with accent */
+  --success: #198754;           /* Green — "Available" status */
+  --success-light: #D1E7DD;     /* Light green — success backgrounds */
+  --warning: #FFC107;           /* Yellow — warnings, "almost eligible" */
+  --warning-light: #FFF3CD;     /* Light yellow — warning backgrounds */
+
+  /* ---- Neutral Colors ---- */
+  --white: #FFFFFF;
+  --bg-primary: #FAFBFC;        /* Page background — off-white */
+  --bg-secondary: #F0F2F5;      /* Card backgrounds, sections */
+  --bg-tertiary: #E4E7EB;       /* Borders, dividers */
+  --text-primary: #1A1D23;      /* Main text — near-black */
+  --text-secondary: #4A5568;    /* Secondary text — dark gray */
+  --text-tertiary: #718096;     /* Subtle text — medium gray */
+  --text-on-primary: #FFFFFF;   /* Text on red backgrounds */
+  --border: #E2E8F0;            /* Default border color */
+  --border-light: #EDF2F7;      /* Subtle borders */
+
+  /* ---- Typography ---- */
+  /* rem = "root em" — relative to the root font size (16px by default)
+     1rem = 16px, 0.875rem = 14px, 1.5rem = 24px
+     WHY rem instead of px? rem scales if the user changes their 
+     browser font size (accessibility!), px does not. */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-size-xs: 0.75rem;     /* 12px — tiny labels */
+  --font-size-sm: 0.875rem;    /* 14px — small text */
+  --font-size-base: 1rem;      /* 16px — body text */
+  --font-size-md: 1.125rem;    /* 18px — slightly larger body */
+  --font-size-lg: 1.25rem;     /* 20px — sub-headings */
+  --font-size-xl: 1.5rem;      /* 24px — section titles */
+  --font-size-2xl: 2rem;       /* 32px — page titles */
+  --font-size-3xl: 2.5rem;     /* 40px — hero title */
+  --font-size-4xl: 3.25rem;    /* 52px — hero title on desktop */
+
+  /* ---- Spacing ---- */
+  /* Consistent spacing using a 4px base grid.
+     This means all spacing is a multiple of 4px, which creates
+     a visual rhythm/consistency across the page. */
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-20: 5rem;     /* 80px */
+  --space-24: 6rem;     /* 96px */
+
+  /* ---- Border Radius ---- */
+  /* Border-radius rounds the corners of elements.
+     Higher number = more rounded. */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;  /* Makes circles or pill-shaped buttons */
+
+  /* ---- Shadows ---- */
+  /* Box shadows add depth. Format: x-offset y-offset blur spread color
+     Multiple shadows (separated by commas) create more realistic depth. */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+
+  /* ---- Transitions ---- */
+  /* Transitions make changes smooth instead of instant.
+     "all 0.2s ease" means: animate ALL properties over 0.2 seconds
+     with an "ease" curve (starts slow, speeds up, slows at end). */
+  --transition-fast: all 0.15s ease;
+  --transition-base: all 0.2s ease;
+  --transition-slow: all 0.3s ease;
+
+  /* ---- Layout ---- */
+  --max-width: 1200px;    /* Maximum content width — prevents text
+                             from stretching too wide on big monitors */
+  --navbar-height: 72px;
+}
+
+/* ----- GLOBAL ELEMENT STYLES -----
+   These apply to base HTML elements across the entire app. */
+
+html {
+  /* scroll-behavior: smooth makes anchor links (#section) scroll 
+     smoothly instead of jumping instantly */
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  /* line-height: 1.6 means the line spacing is 1.6x the font size.
+     This gives comfortable reading spacing (1.0 would be cramped). */
+  line-height: 1.6;
+  /* -webkit-font-smoothing makes fonts look crisper on Mac/iOS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Remove default link underline and color, we'll style them ourselves */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Make images responsive by default — they'll never overflow their container */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Remove default list bullets */
+ul, ol {
+  list-style: none;
+}
+
+/* Default button reset — remove browser's ugly default button styles */
+button {
+  cursor: pointer;          /* Shows hand cursor on hover */
+  border: none;
+  background: none;
+  font-family: inherit;     /* Use our Inter font, not browser default */
+  font-size: inherit;
+  color: inherit;
+}
+
+/* ============================================================
+   REUSABLE COMPONENT STYLES
+   ============================================================ */
+
+/* ----- CONTAINER -----
+   A centered container with max-width and padding.
+   Used to wrap content so it doesn't stretch edge-to-edge
+   on wide screens. */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;             /* auto left/right margin = centered */
+  padding: 0 var(--space-6);  /* 24px padding on left/right */
+}
+
+/* ----- BUTTONS -----
+   We have multiple button variants:
+   .btn = base styles shared by all buttons
+   .btn-primary = red filled button (main actions)
+   .btn-secondary = white outlined button (secondary actions)
+   .btn-ghost = transparent button (subtle actions)
+*/
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);        /* Space between icon and text */
+  padding: var(--space-3) var(--space-6);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-lg);
+  transition: var(--transition-base);
+  white-space: nowrap;        /* Prevent text from wrapping */
+  line-height: 1.4;
+}
+
+.btn-lg {
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--font-size-base);
+  border-radius: var(--radius-xl);
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: var(--text-on-primary);
+  box-shadow: 0 2px 8px var(--primary-glow);
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+  box-shadow: 0 4px 16px var(--primary-glow);
+  transform: translateY(-1px); /* Slight lift effect on hover */
+}
+
+.btn-primary:active {
+  transform: translateY(0);    /* Press back down on click */
+}
+
+.btn-secondary {
+  background: var(--white);
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+
+.btn-secondary:hover {
+  background: var(--primary-light);
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.btn-ghost:hover {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* ----- SECTION STYLES -----
+   Reusable styles for page sections */
+.section {
+  padding: var(--space-20) 0;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: var(--space-12);
+}
+
+.section-label {
+  display: inline-block;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;      /* Spreads letters apart slightly */
+  margin-bottom: var(--space-3);
+}
+
+.section-title {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-bottom: var(--space-4);
+}
+
+.section-subtitle {
+  font-size: var(--font-size-md);
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ----- CARD STYLES ----- */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  transition: var(--transition-base);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* ----- BADGE STYLES ----- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  border-radius: var(--radius-full);
+}
+
+.badge-available {
+  background: var(--success-light);
+  color: var(--success);
+}
+
+.badge-unavailable {
+  background: var(--warning-light);
+  color: #856404;
+}
+
+/* ============================================================
+   RESPONSIVE BREAKPOINTS
+   ============================================================
+   @media queries change styles based on screen width.
+   
+   Our breakpoints:
+   - Mobile: default (no query needed — "mobile-first" approach)
+   - Tablet: 640px+
+   - Desktop: 768px+
+   - Large desktop: 1024px+
+   
+   "Mobile-first" means we write mobile styles FIRST (as defaults),
+   then ADD larger-screen styles inside @media. This is best practice
+   because most users will be on phones (from the PRD).
+*/
+@media (min-width: 768px) {
+  .section-title {
+    font-size: var(--font-size-3xl);
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-title {
+    font-size: var(--font-size-3xl);
+  }
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================
+   @keyframes defines reusable animations.
+   We can then apply them using the "animation" property.
+*/
+
+/* Fade in from below — used when elements appear on page */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;                    /* Start invisible */
+    transform: translateY(20px);   /* Start 20px below final position */
+  }
+  to {
+    opacity: 1;                    /* End fully visible */
+    transform: translateY(0);      /* End at normal position */
+  }
+}
+
+/* Subtle floating animation — used for decorative elements */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Pulse animation — used for "live" indicators */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Utility class to apply fade-in animation */
+.animate-fade-in {
+  animation: fadeInUp 0.6s ease forwards;
+}

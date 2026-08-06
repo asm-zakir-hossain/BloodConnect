@@ -1,0 +1,98 @@
+/* ============================================================
+   CTA SECTION STYLES — CTASection.module.css
+   ============================================================ */
+
+.section {
+  padding: var(--space-20) 0;
+  background: var(--white);
+}
+
+/* ---- CTA CARD ----
+   A large card with a subtle gradient background.
+   position: relative is needed for the decorative SVGs
+   which use position: absolute.
+   overflow: hidden clips the decorative elements that
+   extend beyond the card boundaries.
+*/
+.ctaCard {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--primary-light) 0%, #FDE8E8 50%, #FFF0F0 100%);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-16) var(--space-8);
+  text-align: center;
+}
+
+/* ---- DECORATIVE SVGs ----
+   Blood drop shapes placed in corners for visual interest.
+   They're subtle (low opacity) and don't distract from content.
+*/
+.decorLeft {
+  position: absolute;
+  bottom: -20px;
+  left: -10px;
+  color: var(--primary);
+}
+
+.decorRight {
+  position: absolute;
+  top: -10px;
+  right: 30px;
+  color: var(--primary);
+}
+
+/* ---- CTA CONTENT ---- */
+.ctaContent {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.ctaTitle {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-4);
+  line-height: 1.2;
+}
+
+.ctaSubtitle {
+  font-size: var(--font-size-md);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-8);
+  line-height: 1.7;
+}
+
+.ctaButtons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.ctaBtn {
+  padding: var(--space-4) var(--space-10);
+}
+
+.ctaBtnSecondary {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.ctaBtnSecondary:hover {
+  color: var(--primary);
+}
+
+/* ---- RESPONSIVE ---- */
+@media (min-width: 768px) {
+  .ctaTitle {
+    font-size: var(--font-size-3xl);
+  }
+}
+
+@media (max-width: 640px) {
+  .ctaCard {
+    padding: var(--space-10) var(--space-6);
+  }
+}

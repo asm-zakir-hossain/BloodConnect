@@ -1,0 +1,113 @@
+/* ============================================================
+   HOW IT WORKS STYLES — HowItWorks.module.css
+   ============================================================ */
+
+.section {
+  padding: var(--space-20) 0;
+  background: var(--white);
+}
+
+/* ---- STEPS GRID ----
+   CSS Grid is used here (not Flexbox) because we want a
+   GRID layout — items in rows AND columns.
+   
+   📚 FLEXBOX vs GRID:
+   - Flexbox = ONE direction (row OR column). Good for navbars, button groups.
+   - Grid = TWO directions (rows AND columns). Good for card layouts, page layouts.
+   
+   grid-template-columns: repeat(3, 1fr)
+   = create 3 columns, each taking 1fr (1 fraction) of the available space.
+   So each column is exactly 1/3 of the total width.
+   
+   gap: var(--space-8) = 32px space between grid items.
+*/
+.stepsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-8);
+}
+
+/* ---- STEP CARD ----
+   Each card has a top border accent for visual interest.
+   text-align: center centers all content within.
+*/
+.stepCard {
+  text-align: center;
+  padding: var(--space-8) var(--space-6);
+  border-radius: var(--radius-xl);
+  transition: var(--transition-base);
+  position: relative;
+}
+
+.stepCard:hover {
+  background: var(--bg-primary);
+}
+
+/* ---- STEP NUMBER ----
+   The "01", "02", "03" labels.
+   Small, muted text that shows progression.
+*/
+.stepNumber {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--primary);
+  opacity: 0.5;
+  margin-bottom: var(--space-4);
+  letter-spacing: 0.1em;
+}
+
+/* ---- STEP ICON ----
+   A circular container for the SVG icon.
+   
+   width/height: 64px = fixed size circle
+   border-radius: var(--radius-xl) = rounded square (softer than circle)
+   
+   The icon container has a light pink background with the red icon,
+   creating a consistent visual pattern across all three steps.
+*/
+.stepIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--space-6);
+  transition: var(--transition-base);
+}
+
+.stepCard:hover .stepIcon {
+  background: var(--primary);
+  color: var(--white);
+  transform: scale(1.05);
+}
+
+.stepTitle {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-3);
+}
+
+.stepDescription {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ---- RESPONSIVE ----
+   On tablets (< 768px): switch to 1 column layout
+   The cards stack vertically, which is better for narrow screens.
+*/
+@media (max-width: 768px) {
+  .stepsGrid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .stepCard {
+    padding: var(--space-6);
+  }
+}

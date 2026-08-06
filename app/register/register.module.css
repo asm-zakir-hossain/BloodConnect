@@ -1,0 +1,395 @@
+/* ============================================================
+   REGISTRATION PAGE STYLES — register.module.css
+   ============================================================
+   
+   📚 FORM DESIGN PRINCIPLES
+   
+   1. GROUP RELATED FIELDS: We organize fields into sections
+      (Personal Info, Account, Donor Info, Location).
+      This reduces cognitive load — users focus on one topic at a time.
+   
+   2. SINGLE COLUMN LAYOUT: Forms with one field per row have higher
+      completion rates than multi-column forms. People read top-to-bottom.
+   
+   3. CLEAR LABELS: Every input has a visible label above it.
+      Placeholder text disappears when you start typing, so it's NOT
+      a substitute for a label.
+   
+   4. INSTANT ERROR FEEDBACK: Red border + error message appears
+      right below the problematic field, not in a generic alert box.
+   ============================================================ */
+
+/* ---- PAGE WRAPPER ----
+   Centers the form card on the page.
+   min-height: 100vh ensures it fills at least the full screen.
+   padding-top: accounts for the fixed navbar.
+*/
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: calc(var(--navbar-height) + var(--space-10)) var(--space-6) var(--space-16);
+  background: var(--bg-primary);
+}
+
+/* ---- FORM CONTAINER ----
+   The white card that holds the entire form.
+   max-width: 580px keeps it comfortable for reading.
+   Wider forms make it hard for the eye to track from label to input.
+*/
+.formContainer {
+  width: 100%;
+  max-width: 580px;
+  animation: fadeInUp 0.5s ease;
+}
+
+/* ---- FORM HEADER ---- */
+.formHeader {
+  text-align: center;
+  margin-bottom: var(--space-8);
+}
+
+.formTitle {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-3);
+}
+
+.formSubtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ---- FORM ---- */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* ---- FORM SECTIONS ----
+   Each section is a visually separated group of fields.
+   The white card with rounded corners creates visual boundaries.
+*/
+.formSection {
+  background: var(--white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.sectionTitle svg {
+  color: var(--primary);
+}
+
+/* ---- FORM GROUP ----
+   Each label + input pair is a "form group."
+   margin-bottom creates space between groups.
+*/
+.formGroup {
+  margin-bottom: var(--space-5);
+}
+
+.formGroup:last-child {
+  margin-bottom: 0;
+}
+
+/* ---- LABEL ----
+   display: block makes it take full width (sits above the input).
+   margin-bottom creates a small gap between label and input.
+*/
+.label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+}
+
+/* Red asterisk for required fields */
+.required {
+  color: var(--primary);
+}
+
+/* ---- INPUT FIELDS ----
+   Consistent styling for all text inputs, selects, etc.
+   
+   outline: none removes the browser's default focus outline.
+   We replace it with our own (box-shadow on :focus) which
+   looks much better and is more customizable.
+   
+   transition smoothly animates the border color change on focus.
+*/
+.input {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-base);
+  font-family: var(--font-family);
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  outline: none;
+  transition: var(--transition-base);
+  line-height: 1.5;
+}
+
+/* Placeholder text style */
+.input::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* Focus state — blue/red glow when the input is selected */
+.input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-glow);
+  background: var(--white);
+}
+
+/* Error state — red border when validation fails */
+.inputError {
+  border-color: var(--primary);
+}
+
+/* Disabled state — grayed out when not interactive */
+.inputDisabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---- ERROR TEXT ----
+   Red text below an input showing what's wrong.
+*/
+.errorText {
+  display: block;
+  font-size: var(--font-size-xs);
+  color: var(--primary);
+  margin-top: var(--space-1);
+  font-weight: 500;
+}
+
+/* General error banner at the top of the form */
+.errorBanner {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  margin-bottom: var(--space-4);
+}
+
+/* ---- HELP TEXT ----
+   Subtle gray text below inputs providing extra context.
+*/
+.helpText {
+  display: block;
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  margin-top: var(--space-2);
+  line-height: 1.5;
+}
+
+/* ---- BLOOD GROUP SELECTOR GRID ----
+   4×2 grid of buttons for selecting blood group.
+   
+   📚 WHY BUTTON GRID INSTEAD OF DROPDOWN?
+   Medical blood types are a small, fixed set (8 options).
+   Showing all options at once is FASTER than opening a dropdown.
+   This pattern is recommended when you have < 10 options.
+*/
+.bloodGroupGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+}
+
+.bloodGroupBtn {
+  padding: var(--space-3) var(--space-2);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--bg-primary);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: var(--transition-base);
+  font-family: var(--font-family);
+}
+
+.bloodGroupBtn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+/* Active/selected state — filled red background */
+.bloodGroupActive {
+  background: var(--primary);
+  color: var(--white);
+  border-color: var(--primary);
+}
+
+.bloodGroupActive:hover {
+  background: var(--primary-dark);
+  color: var(--white);
+}
+
+/* ---- CONSENT TEXT ---- */
+.consentText {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--space-5);
+}
+
+/* ---- SUBMIT BUTTON ---- */
+.submitBtn {
+  width: 100%;
+  padding: var(--space-4);
+  font-size: var(--font-size-base);
+}
+
+.submitBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ---- LOADING SPINNER ----
+   A spinning circle animation for the "Creating Account..." state.
+   
+   @keyframes spin rotates the element 360° continuously.
+   border: 2px solid transparent on all sides except the top
+   creates the partial-circle spinner appearance.
+*/
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid transparent;
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---- LOGIN LINK ---- */
+.loginLink {
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-top: var(--space-4);
+}
+
+.link {
+  color: var(--primary);
+  font-weight: 600;
+  transition: var(--transition-base);
+}
+
+.link:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+/* ============================================================
+   SUCCESS STATE STYLES
+   ============================================================ */
+.successCard {
+  background: var(--white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-12) var(--space-8);
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+  animation: fadeInUp 0.5s ease;
+}
+
+.successIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background: var(--success-light);
+  color: var(--success);
+  border-radius: 50%;
+  margin-bottom: var(--space-6);
+}
+
+.successTitle {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-3);
+}
+
+.successText {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-3);
+  line-height: 1.6;
+}
+
+.successNote {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-6);
+  font-style: italic;
+}
+
+.successActions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* ---- ANIMATIONS ---- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 480px) {
+  .formSection {
+    padding: var(--space-5);
+  }
+
+  .bloodGroupGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-2);
+  }
+
+  .formTitle {
+    font-size: var(--font-size-xl);
+  }
+}

@@ -1,0 +1,254 @@
+/* ============================================================
+   NAVBAR STYLES — Navbar.module.css
+   ============================================================
+   
+   📚 CSS MODULES
+   This file is a "CSS Module" (.module.css).
+   When we import it as: import styles from "./Navbar.module.css"
+   
+   Next.js automatically makes each class name UNIQUE by adding
+   a random hash. So ".navbar" might become ".Navbar_navbar_x7k2q"
+   in the final HTML. This prevents class name conflicts between
+   different components.
+   
+   We access them in JSX as: className={styles.navbar}
+   ============================================================ */
+
+/* ---- NAVBAR CONTAINER ----
+   position: fixed = stays at the top even when you scroll
+   top: 0 = stick to the very top of the viewport
+   z-index: 1000 = appears ABOVE everything else on the page
+   (higher z-index = closer to the user's eyes)
+   
+   backdrop-filter: blur = "frosted glass" effect — the content
+   behind the navbar gets blurred, creating a premium feel.
+   background: rgba(255,255,255,0.85) = 85% white with 15% transparency
+   so the blur effect is visible through it.
+*/
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: #FFFFFF;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 1px solid var(--border-light);
+  height: var(--navbar-height);
+}
+
+/* ---- INNER LAYOUT ----
+   display: flex = modern CSS layout method.
+   
+   📚 WHAT IS FLEXBOX?
+   Flexbox arranges child elements in a row (or column).
+   - justify-content: space-between = pushes items to opposite ends
+     (logo on left, nav links on right)
+   - align-items: center = vertically centers items in the row
+   
+   Think of it like: [Logo] ............... [Links] [Button]
+*/
+.navbarInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+/* ---- LOGO ----
+   display: flex + align-items: center = icon and text sit
+   side by side, vertically aligned.
+   gap: 10px = 10px space between icon and text.
+*/
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  transition: var(--transition-base);
+}
+
+.logo:hover {
+  opacity: 0.85;
+}
+
+.logoIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoText {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* This makes "Connect" appear in our primary red color */
+.logoHighlight {
+  color: var(--primary);
+}
+
+/* ---- DESKTOP NAV ----
+   gap: var(--space-2) = space between each nav link.
+   
+   @media (max-width: 768px) hides this on mobile screens.
+   On mobile, the hamburger menu takes over instead.
+*/
+.desktopNav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.navLink {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-radius: var(--radius-md);
+  transition: var(--transition-base);
+}
+
+.navLink:hover {
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+}
+
+.registerBtn {
+  margin-left: var(--space-2);
+}
+
+/* ---- MOBILE HAMBURGER BUTTON ----
+   display: none = hidden by default (shown only on mobile via media query).
+   
+   The hamburger is three <span> lines that animate into an X
+   when the menu opens (handled by .hamburgerOpen styles below).
+*/
+.mobileMenuBtn {
+  display: none;
+  padding: var(--space-2);
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* ---- HAMBURGER ICON ----
+   The three horizontal lines that form the ☰ icon.
+   width: 24px, height: 2px each, with 6px gaps between them.
+*/
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 24px;
+}
+
+.hamburger span {
+  display: block;
+  height: 2px;
+  background: var(--text-primary);
+  border-radius: 2px;
+  transition: var(--transition-base);
+  transform-origin: center;
+}
+
+/* ---- HAMBURGER → X ANIMATION ----
+   When menu is open, the three lines transform into an X:
+   - Top line: rotates 45° and moves down
+   - Middle line: fades out (opacity: 0)
+   - Bottom line: rotates -45° and moves up
+   
+   :nth-child(n) selects the 1st, 2nd, or 3rd <span>
+*/
+.hamburgerOpen span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.hamburgerOpen span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburgerOpen span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ---- MOBILE MENU OVERLAY ----
+   This is the full-screen menu that appears on mobile.
+   position: fixed = covers the entire screen.
+   
+   We use a semi-transparent white background and blur
+   for that premium frosted glass look.
+   
+   animation: slideIn slides it in from the top.
+*/
+.mobileMenu {
+  position: fixed;
+  top: var(--navbar-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 999;
+  animation: slideIn 0.25s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mobileNav {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-8) var(--space-6);
+  gap: var(--space-2);
+}
+
+.mobileNavLink {
+  display: block;
+  padding: var(--space-4) var(--space-4);
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-radius: var(--radius-lg);
+  transition: var(--transition-base);
+}
+
+.mobileNavLink:hover {
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+}
+
+.mobileRegisterBtn {
+  margin-top: var(--space-4);
+  width: 100%;
+  text-align: center;
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE STYLES
+   ============================================================
+   max-width: 768px = these styles apply when the screen is
+   768px wide or LESS (roughly tablet/phone screens).
+   
+   We HIDE the desktop nav and SHOW the hamburger button.
+*/
+@media (max-width: 768px) {
+  .desktopNav {
+    display: none;    /* Hide "Find Donors", "Log In" etc. links */
+  }
+
+  .mobileMenuBtn {
+    display: block;   /* Show the hamburger ☰ button */
+  }
+}

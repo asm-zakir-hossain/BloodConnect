@@ -1,0 +1,132 @@
+/* ============================================================
+   DONOR CARD STYLES — DonorCard.module.css
+   ============================================================ */
+
+.card {
+  background: var(--white);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  border-color: var(--border);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* Grayed out background for unavailable donors */
+.cardUnavailable {
+  background: #F9FAFB;
+  opacity: 0.85;
+}
+
+/* ---- CARD HEADER ---- */
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+/* Large circular badge for blood type */
+.bloodBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: var(--font-size-lg);
+  font-weight: 800;
+  border-radius: 50%;
+  border: 2px solid rgba(220, 53, 69, 0.2);
+}
+
+.statusGroup {
+  display: flex;
+  align-items: center;
+}
+
+.dotAvailable {
+  width: 6px;
+  height: 6px;
+  background: var(--success);
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+/* ---- CARD BODY ---- */
+.cardBody {
+  margin-bottom: var(--space-6);
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.donorName {
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.unverifiedBadge {
+  font-size: var(--font-size-xs);
+  padding: 2px 8px;
+  background: var(--bg-secondary);
+  color: var(--text-tertiary);
+  border-radius: var(--radius-full);
+  font-weight: 500;
+}
+
+.locationInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-3);
+}
+
+.locationInfo svg {
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  padding-top: var(--space-3);
+  border-top: 1px dashed var(--border-light);
+}
+
+.metaItem strong {
+  color: var(--text-primary);
+}
+
+/* ---- CARD FOOTER ---- */
+.cardFooter {
+  margin-top: auto;
+}
+
+.callBtn, .revealBtn {
+  width: 100%;
+  font-size: var(--font-size-sm);
+  padding: var(--space-3) var(--space-4);
+}
