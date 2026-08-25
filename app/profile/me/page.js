@@ -15,66 +15,89 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./dashboard.module.css";
+import { getMyProfile, logDonation } from "@/lib/api";
+import { isLoggedIn, clearSession } from "@/lib/auth";
 
 export default function DonorDashboardPage() {
-  // Donor state simulating logged in user
-  const [profile, setProfile] = useState({
-    name: "Tanvir Ahmed",
-    phone: "01711002233",
-    email: "tanvir@example.com",
-    bloodGroup: "O+",
-    division: "Dhaka",
-    district: "Dhaka",
-    area: "Mirpur 10",
-    totalDonations: 4,
-    lastDonationDate: "2026-02-15",
-    isAvailable: true,
-    nextEligibleDate: null,
-  });
+  const router = useRouter();
+
+  const [profile, setProfile] = useState(null);
+  const [isLoadingProfile, setIsLoadingProfile] = useState(true);
+  const [loadError, setLoadError] = useState("");
 
   const [donationDateInput, setDonationDateInput] = useState("");
   const [locationNoteInput, setLocationNoteInput] = useState("");
   const [isLogging, setIsLogging] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
+  const [logError, setLogError] = useState("");
+
+  /* ---- LOAD THE LOGGED-IN DONOR'S PROFILE ---- */
+  useEffect(() => {
+    if (!isLoggedIn()) {
+      router.replace("/login");
+      return;
+    }
+
+    getMyProfile()
+      .then(setProfile)
+      .catch((err) => setLoadError(err.message || "Failed to load your profile."))
+      .finally(() => setIsLoadingProfile(false));
+  }, [router]);
+
+  const handleLogOut = () => {
+    clearSession();
+    router.push("/login");
+  };
 
   /* ---- LOG DONATION HANDLER ---- */
-  const handleLogDonation = (e) => {
+  const handleLogDonation = async (e) => {
     e.preventDefault();
     if (!donationDateInput) return;
 
     setIsLogging(true);
+    setLogError("");
 
-    // Calculate next eligible date (+90 days)
-    const donatedDateObj = new Date(donationDateInput);
-    const eligibleDateObj = new Date(donatedDateObj);
-    eligibleDateObj.setDate(eligibleDateObj.getDate() + 90);
-
-    const eligibleDateStr = eligibleDateObj.toISOString().split("T")[0];
-
-    // Check if 90 days have already passed relative to today
-    const todayStr = new Date().toISOString().split("T")[0];
-    const isNowAvailable = todayStr >= eligibleDateStr;
-
-    setTimeout(() => {
-      setProfile((prev) => ({
-        ...prev,
-        lastDonationDate: donationDateInput,
-        totalDonations: prev.totalDonations + 1,
-        isAvailable: isNowAvailable,
-        nextEligibleDate: isNowAvailable ? null : eligibleDateStr,
-      }));
-
-      setIsLogging(false);
+    try {
+      const updated = await logDonation({
+        donationDate: donationDateInput,
+        locationNote: locationNoteInput || undefined,
+      });
+      setProfile(updated);
       setSuccessMsg("Donation logged successfully! Availability status updated.");
       setDonationDateInput("");
       setLocationNoteInput("");
-
       setTimeout(() => setSuccessMsg(""), 4000);
-    }, 800);
+    } catch (err) {
+      setLogError(err.message || "Failed to log donation. Please try again.");
+    } finally {
+      setIsLogging(false);
+    }
   };
+
+  if (isLoadingProfile) {
+    return (
+      <div className={styles.page}>
+        <div className="container">Loading your dashboard...</div>
+      </div>
+    );
+  }
+
+  if (loadError || !profile) {
+    return (
+      <div className={styles.page}>
+        <div className="container">
+          <p>{loadError || "Could not load your profile."}</p>
+          <Link href="/login" className="btn btn-primary btn-sm">
+            Log In Again
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   /* Calculate progress percentage if in cooldown */
   let cooldownProgressPercent = 100;
@@ -108,9 +131,14 @@ export default function DonorDashboardPage() {
               Welcome back, <strong>{profile.name}</strong> ({profile.bloodGroup})
             </p>
           </div>
-          <Link href={`/profile/d1`} className="btn btn-secondary btn-sm">
-            View Public Profile
-          </Link>
+          <div className={styles.headerActions}>
+            <Link href={`/profile/${profile.id}`} className="btn btn-secondary btn-sm">
+              View Public Profile
+            </Link>
+            <button onClick={handleLogOut} className="btn btn-ghost btn-sm">
+              Log Out
+            </button>
+          </div>
         </div>
 
         {/* ---- AVAILABILITY & COOLDOWN CARD ---- */}
@@ -164,6 +192,7 @@ export default function DonorDashboardPage() {
             </p>
 
             {successMsg && <div className={styles.successBanner}>{successMsg}</div>}
+            {logError && <div className={styles.errorBanner}>{logError}</div>}
 
             <form onSubmit={handleLogDonation}>
               <div className={styles.formGroup}>

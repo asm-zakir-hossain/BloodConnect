@@ -13,9 +13,9 @@
 
 "use client";
 
-import { useState, use } from "react";
+import { useState, useEffect, use } from "react";
 import Link from "next/link";
-import { mockDonors } from "@/data/mockDonors";
+import { getDonorProfile } from "@/lib/api";
 import styles from "./profile.module.css";
 
 export default function PublicProfilePage({ params }) {
@@ -23,15 +23,36 @@ export default function PublicProfilePage({ params }) {
   const resolvedParams = use(params);
   const donorId = resolvedParams.id;
 
-  // Find matching donor from mock data
-  const donor = mockDonors.find((d) => d.id === donorId) || mockDonors[0];
+  const [donor, setDonor] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
 
-  const [isPhoneRevealed, setIsPhoneRevealed] = useState(
-    donor.phoneVisibility === "public"
-  );
+  const [isPhoneRevealed, setIsPhoneRevealed] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const [reportSubmitted, setReportSubmitted] = useState(false);
   const [reportReason, setReportReason] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    getDonorProfile(donorId)
+      .then((data) => {
+        if (cancelled) return;
+        setDonor(data);
+        setLoadError("");
+        setIsPhoneRevealed(false);
+      })
+      .catch((err) => {
+        if (!cancelled) setLoadError(err.message || "Donor not found.");
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [donorId]);
 
   const handleReportSubmit = (e) => {
     e.preventDefault();
@@ -43,6 +64,27 @@ export default function PublicProfilePage({ params }) {
       setReportReason("");
     }, 2000);
   };
+
+  if (isLoading) {
+    return (
+      <div className={styles.page}>
+        <div className="container">Loading donor profile...</div>
+      </div>
+    );
+  }
+
+  if (loadError || !donor) {
+    return (
+      <div className={styles.page}>
+        <div className="container">
+          <p>{loadError || "Donor not found."}</p>
+          <Link href="/search" className={styles.backLink}>
+            Back to Search Results
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.page}>
@@ -114,23 +156,29 @@ export default function PublicProfilePage({ params }) {
           {/* ---- CONTACT & CALL ACTION ---- */}
           <div className={styles.actionSection}>
             <h3 className={styles.sectionTitle}>Contact Donor</h3>
-            {isPhoneRevealed ? (
-              <a
-                href={`tel:${donor.phone}`}
-                className={`btn btn-primary btn-lg ${styles.callBtn}`}
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                </svg>
-                Call {donor.phone}
-              </a>
+            {donor.phone ? (
+              isPhoneRevealed ? (
+                <a
+                  href={`tel:${donor.phone}`}
+                  className={`btn btn-primary btn-lg ${styles.callBtn}`}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                  </svg>
+                  Call {donor.phone}
+                </a>
+              ) : (
+                <button
+                  onClick={() => setIsPhoneRevealed(true)}
+                  className="btn btn-secondary btn-lg"
+                >
+                  Click to Reveal Phone Number
+                </button>
+              )
             ) : (
-              <button
-                onClick={() => setIsPhoneRevealed(true)}
-                className="btn btn-secondary btn-lg"
-              >
-                Click to Reveal Phone Number
-              </button>
+              <Link href="/login" className="btn btn-secondary btn-lg">
+                Log In to View Phone Number
+              </Link>
             )}
 
             {/* Report Profile Button (PRD Trust & Safety 5.5) */}

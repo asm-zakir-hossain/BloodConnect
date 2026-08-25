@@ -32,9 +32,25 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import styles from "./Navbar.module.css";
+import { isLoggedIn } from "@/lib/auth";
+
+/*
+  Auth state lives in localStorage, an "external store" React doesn't know
+  about. useSyncExternalStore reads it safely — false on the server (where
+  there's no localStorage) and the real value on the client, without a
+  useState+useEffect round trip.
+*/
+function subscribeToAuthChanges(callback) {
+  window.addEventListener("storage", callback);
+  return () => window.removeEventListener("storage", callback);
+}
+
+function getServerAuthSnapshot() {
+  return false;
+}
 
 export default function Navbar() {
   /*
@@ -47,6 +63,8 @@ export default function Navbar() {
     When they click a link or the X, we set it back to false.
   */
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const loggedIn = useSyncExternalStore(subscribeToAuthChanges, isLoggedIn, getServerAuthSnapshot);
 
   return (
     /* 
@@ -108,9 +126,15 @@ export default function Navbar() {
           <Link href="/about" className={styles.navLink}>
             How It Works
           </Link>
-          <Link href="/login" className={styles.navLink}>
-            Log In
-          </Link>
+          {loggedIn ? (
+            <Link href="/profile/me" className={styles.navLink}>
+              My Dashboard
+            </Link>
+          ) : (
+            <Link href="/login" className={styles.navLink}>
+              Log In
+            </Link>
+          )}
           <Link href="/register" className={`btn btn-primary ${styles.registerBtn}`}>
             Register as Donor
           </Link>
@@ -169,13 +193,23 @@ export default function Navbar() {
               >
                 How It Works
               </Link>
-              <Link
-                href="/login"
-                className={styles.mobileNavLink}
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Log In
-              </Link>
+              {loggedIn ? (
+                <Link
+                  href="/profile/me"
+                  className={styles.mobileNavLink}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  My Dashboard
+                </Link>
+              ) : (
+                <Link
+                  href="/login"
+                  className={styles.mobileNavLink}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Log In
+                </Link>
+              )}
               <Link
                 href="/register"
                 className={`btn btn-primary btn-lg ${styles.mobileRegisterBtn}`}

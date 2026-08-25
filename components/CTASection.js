@@ -47,7 +47,7 @@ export default function CTASection() {
             </p>
             <div className={styles.ctaButtons}>
               <Link href="/register" className={`btn btn-primary btn-lg ${styles.ctaBtn}`}>
-                Register as Donor — It's Free
+                Register as Donor — It&apos;s Free
               </Link>
               <Link href="/search" className={`btn btn-ghost btn-lg ${styles.ctaBtnSecondary}`}>
                 Or find a donor now →

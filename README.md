@@ -1,8 +1,22 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app), backed by a FastAPI service in `backend/`.
 
 ## Getting Started
 
-First, run the development server:
+This app needs two servers running at once: the FastAPI backend (port 8000) and the Next.js frontend (port 3000).
+
+**1. Start the backend** (see `backend/README.md` for details):
+
+```bash
+cd backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env
+python seed.py          # optional: adds 8 sample donors, password "password123"
+uvicorn app.main:app --reload --port 8000
+```
+
+**2. Start the frontend**, in a separate terminal from the project root:
 
 ```bash
 npm run dev

@@ -20,10 +20,15 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./login.module.css";
+import { loginUser } from "@/lib/api";
+import { setSession } from "@/lib/auth";
 
 export default function LoginPage() {
+  const router = useRouter();
+
   /* Form state — only email/phone and password needed */
   const [formData, setFormData] = useState({
     emailOrPhone: "",
@@ -65,15 +70,14 @@ export default function LoginPage() {
 
     setIsSubmitting(true);
     try {
-      // TODO: Replace with actual API call
-      // POST /auth/login with { emailOrPhone, password }
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      
-      // On success, redirect to home or dashboard
-      // For now, just show we're "logged in"
-      window.location.href = "/";
+      const response = await loginUser({
+        emailOrPhone: formData.emailOrPhone,
+        password: formData.password,
+      });
+      setSession(response.accessToken, response.donor);
+      router.push("/profile/me");
     } catch (error) {
-      setErrors({ general: "Invalid email/phone or password." });
+      setErrors({ general: error.message || "Invalid email/phone or password." });
     } finally {
       setIsSubmitting(false);
     }

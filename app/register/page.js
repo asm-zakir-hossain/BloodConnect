@@ -47,6 +47,8 @@ import styles from "./register.module.css";
   This keeps the component file clean and the data reusable.
 */
 import { divisions, getDistrictsByDivision } from "@/data/locations";
+import { registerUser } from "@/lib/api";
+import { setSession } from "@/lib/auth";
 
 /*
   📚 BLOOD_GROUPS ARRAY
@@ -258,14 +260,24 @@ export default function RegisterPage() {
 
     setIsSubmitting(true);
 
-    // TODO: Replace with actual API call to FastAPI backend
-    // POST /auth/register with formData
     try {
-      // Simulate API call with a delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const response = await registerUser({
+        name: formData.name,
+        email: formData.email.trim() || undefined,
+        phone: formData.phone.trim() || undefined,
+        password: formData.password,
+        confirmPassword: formData.confirmPassword,
+        bloodGroup: formData.bloodGroup,
+        division: formData.division,
+        district: formData.district,
+        dateOfBirth: formData.dateOfBirth || undefined,
+        gender: formData.gender || undefined,
+        lastDonationDate: formData.lastDonationDate || undefined,
+      });
+      setSession(response.accessToken, response.donor);
       setIsSuccess(true);
     } catch (error) {
-      setErrors({ general: "Registration failed. Please try again." });
+      setErrors({ general: error.message || "Registration failed. Please try again." });
     } finally {
       setIsSubmitting(false);
     }
