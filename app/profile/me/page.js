@@ -257,6 +257,20 @@ export default function DonorDashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* ---- PERSISTENT LAST-DONATION TOAST ---- */}
+      {profile && (
+        <div className={styles.donationToast} role="status">
+          {profile.lastDonationDate ? (
+            <>You last donated blood on <strong>{profile.lastDonationDate}</strong>.
+            {profile.nextEligibleDate
+              ? ` Next eligible: ${profile.nextEligibleDate}.`
+              : " You are eligible to donate again."}</>
+          ) : (
+            "You haven't logged a blood donation yet. Log your first donation below!"
+          )}
+        </div>
+      )}
     </div>
   );
 }
