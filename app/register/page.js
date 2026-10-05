@@ -207,6 +207,15 @@ export default function RegisterPage() {
       }
     }
 
+    // Bangladesh phone format check (if provided)
+    if (formData.phone.trim()) {
+      const phoneRegex = /^(?:\+?88)?01[3-9]\d{8}$/;
+      if (!phoneRegex.test(formData.phone.replace(/[\s-]/g, ""))) {
+        newErrors.phone =
+          "Please enter a valid Bangladeshi phone number (e.g. 01711002233)";
+      }
+    }
+
     // Password checks
     if (!formData.password) {
       newErrors.password = "Password is required";
