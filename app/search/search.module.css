@@ -111,3 +111,17 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ---- PAGINATION ---- */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+}
+
+.pageIndicator {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
