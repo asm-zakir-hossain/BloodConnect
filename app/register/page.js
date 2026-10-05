@@ -334,7 +334,7 @@ export default function RegisterPage() {
 
         {/* ---- GENERAL ERROR MESSAGE ---- */}
         {errors.general && (
-          <div className={styles.errorBanner}>{errors.general}</div>
+          <div className={styles.errorBanner} role="alert">{errors.general}</div>
         )}
 
         {/* 
