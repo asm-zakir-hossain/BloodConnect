@@ -54,11 +54,18 @@ function SearchContent() {
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState({ total: 0, totalPages: 1 });
 
+  const [debouncedArea, setDebouncedArea] = useState(filters.area);
+
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedArea(filters.area), 400);
+    return () => clearTimeout(t);
+  }, [filters.area]);
+
   useEffect(() => {
     let cancelled = false;
     setIsLoading(true);
 
-    searchDonors({ ...filters, page, pageSize: 12 })
+    searchDonors({ ...filters, area: debouncedArea, page, pageSize: 12 })
       .then((result) => {
         if (cancelled) return;
         setDonors(result.items);
@@ -75,7 +82,7 @@ function SearchContent() {
     return () => {
       cancelled = true;
     };
-  }, [filters, page]);
+  }, [filters.bloodGroup, filters.division, filters.district, filters.showUnavailable, debouncedArea, page]);
 
   /* Handle filter updates */
   const handleFilterChange = (key, value) => {
