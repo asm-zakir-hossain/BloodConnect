@@ -124,6 +124,9 @@ export default function Navbar() {
           - /login = log into your account
         */}
         <nav className={styles.desktopNav}>
+          <Link href="/" className={styles.navLink}>
+            Home
+          </Link>
           <Link href="/search" className={styles.navLink}>
             Find Donors
           </Link>
@@ -190,6 +193,13 @@ export default function Navbar() {
         {isMobileMenuOpen && (
           <div className={styles.mobileMenu}>
             <nav className={styles.mobileNav}>
+              <Link
+                href="/"
+                className={styles.mobileNavLink}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Home
+              </Link>
               <Link
                 href="/search"
                 className={styles.mobileNavLink}
