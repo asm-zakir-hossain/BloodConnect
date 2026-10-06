@@ -16,10 +16,34 @@
    they've reached the bottom of the page content.
    ============================================================ */
 
+"use client";
+
 import Link from "next/link";
 import styles from "./Footer.module.css";
 
+import { useSyncExternalStore } from "react";
+import { isLoggedIn } from "@/lib/auth";
+
+function subscribeToAuthChanges(callback) {
+  window.addEventListener("storage", callback);
+  window.addEventListener("auth-change", callback);
+  return () => {
+    window.removeEventListener("storage", callback);
+    window.removeEventListener("auth-change", callback);
+  };
+}
+
+function getServerAuthSnapshot() {
+  return false;
+}
+
+function useAuthLoggedIn() {
+  return useSyncExternalStore(subscribeToAuthChanges, isLoggedIn, getServerAuthSnapshot);
+}
+
+
 export default function Footer() {
+  const loggedIn = useAuthLoggedIn();
   return (
     <footer className={styles.footer}>
       <div className="container">
@@ -56,7 +80,7 @@ export default function Footer() {
             <div className={styles.linkColumn}>
               <h4 className={styles.columnTitle}>Platform</h4>
               <Link href="/search" className={styles.footerLink}>Find Donors</Link>
-              <Link href="/register" className={styles.footerLink}>Register as Donor</Link>
+              {!loggedIn && <Link href="/register" className={styles.footerLink}>Register as Donor</Link>}
               <Link href="/about" className={styles.footerLink}>How It Works</Link>
             </div>
 
