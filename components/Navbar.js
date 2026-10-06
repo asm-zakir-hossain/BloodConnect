@@ -131,7 +131,7 @@ export default function Navbar() {
             How It Works
           </Link>
           <Link href="/prime-university" className={styles.navLink}>
-            Community
+            Prime University Community
           </Link>
           {loggedIn ? (
             <Link href="/profile/me" className={styles.navLink}>
@@ -209,7 +209,7 @@ export default function Navbar() {
                 className={styles.mobileNavLink}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Community
+                Prime University Community
               </Link>
               {loggedIn ? (
                 <Link
