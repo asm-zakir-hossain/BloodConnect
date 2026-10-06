@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
+
+from app.main import limiter
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
@@ -12,7 +14,8 @@ router = APIRouter(prefix="/api/auth", tags=["auth"])
 
 
 @router.post("/register", response_model=AuthResponse, status_code=status.HTTP_201_CREATED)
-def register(payload: RegisterRequest, db: Session = Depends(get_db)):
+@limiter.limit("5/minute")
+def register(request: Request, payload: RegisterRequest, db: Session = Depends(get_db)):
     if not payload.email and not payload.phone:
         raise HTTPException(status_code=400, detail="Email or phone number is required")
 
@@ -52,7 +55,8 @@ def register(payload: RegisterRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/login", response_model=AuthResponse)
-def login(payload: LoginRequest, db: Session = Depends(get_db)):
+@limiter.limit("10/minute")
+def login(request: Request, payload: LoginRequest, db: Session = Depends(get_db)):
     donor = db.query(Donor).filter(
         or_(Donor.email == payload.email_or_phone, Donor.phone == payload.email_or_phone)
     ).first()
