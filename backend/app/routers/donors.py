@@ -16,6 +16,7 @@ def search_donors(
     division: str | None = None,
     district: str | None = None,
     area: str | None = None,
+    university: str | None = None,
     show_unavailable: bool = False,
     page: int = 1,
     page_size: int = 12,
@@ -31,6 +32,8 @@ def search_donors(
         query = query.filter(Donor.district == district)
     if area:
         query = query.filter(Donor.area.ilike(f"%{area}%"))
+    if university:
+        query = query.filter(Donor.university.ilike(f"%{university}%"))
 
     results = []
     for donor in query.all():
