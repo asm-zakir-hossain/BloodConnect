@@ -45,7 +45,11 @@ import { isLoggedIn } from "@/lib/auth";
 */
 function subscribeToAuthChanges(callback) {
   window.addEventListener("storage", callback);
-  return () => window.removeEventListener("storage", callback);
+  window.addEventListener("auth-change", callback);
+  return () => {
+    window.removeEventListener("storage", callback);
+    window.removeEventListener("auth-change", callback);
+  };
 }
 
 function getServerAuthSnapshot() {
