@@ -8,6 +8,7 @@
 
 "use client";
 
+import { useState } from "react";
 import { divisions, getDistrictsByDivision } from "@/data/locations";
 import styles from "./SearchFilters.module.css";
 
@@ -21,6 +22,16 @@ export default function SearchFilters({
   const districts = filters.division
     ? getDistrictsByDivision(filters.division)
     : [];
+
+  const [divisionQuery, setDivisionQuery] = useState("");
+  const [districtQuery, setDistrictQuery] = useState("");
+
+  const filteredDivisions = divisions.filter((d) =>
+    d.toLowerCase().includes(divisionQuery.toLowerCase())
+  );
+  const filteredDistricts = districts.filter((d) =>
+    d.toLowerCase().includes(districtQuery.toLowerCase())
+  );
 
   return (
     <div className={styles.filterCard}>
@@ -61,6 +72,14 @@ export default function SearchFilters({
         <label htmlFor="search-division" className={styles.filterLabel}>
           Division
         </label>
+        <input
+          type="text"
+          placeholder="Type to search divisions..."
+          value={divisionQuery}
+          onChange={(e) => setDivisionQuery(e.target.value)}
+          className={styles.selectInput}
+          aria-label="Search divisions"
+        />
         <select
           id="search-division"
           value={filters.division}
@@ -68,7 +87,7 @@ export default function SearchFilters({
           className={styles.selectInput}
         >
           <option value="">All Divisions</option>
-          {divisions.map((div) => (
+          {filteredDivisions.map((div) => (
             <option key={div} value={div}>
               {div}
             </option>
@@ -81,6 +100,17 @@ export default function SearchFilters({
         <label htmlFor="search-district" className={styles.filterLabel}>
           District
         </label>
+        <input
+          type="text"
+          placeholder="Type to search districts..."
+          value={districtQuery}
+          onChange={(e) => setDistrictQuery(e.target.value)}
+          disabled={!filters.division}
+          className={`${styles.selectInput} ${
+            !filters.division ? styles.selectDisabled : ""
+          }`}
+          aria-label="Search districts"
+        />
         <select
           id="search-district"
           value={filters.district}
@@ -93,7 +123,7 @@ export default function SearchFilters({
           <option value="">
             {filters.division ? "All Districts" : "Select Division First"}
           </option>
-          {districts.map((dist) => (
+          {filteredDistricts.map((dist) => (
             <option key={dist} value={dist}>
               {dist}
             </option>
