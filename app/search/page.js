@@ -63,6 +63,7 @@ function SearchContent() {
 
   useEffect(() => {
     let cancelled = false;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsLoading(true);
 
     searchDonors({ ...filters, area: debouncedArea, page, pageSize: 12 })

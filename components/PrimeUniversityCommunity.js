@@ -17,6 +17,7 @@ export default function PrimeUniversityCommunity({ styles }) {
     if (loggedIn) {
       const donor = getStoredDonor();
       if (donor && donor.university === "Prime University") {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setJoined(true);
       } else {
         getMyProfile()
