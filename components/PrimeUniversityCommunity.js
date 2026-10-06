@@ -14,6 +14,21 @@ export default function PrimeUniversityCommunity({ styles }) {
   const loggedIn = isLoggedIn();
 
   useEffect(() => {
+    if (loggedIn) {
+      const donor = getStoredDonor();
+      if (donor && donor.university === "Prime University") {
+        setJoined(true);
+      } else {
+        getMyProfile()
+          .then((profile) => {
+            if (profile && profile.university === "Prime University") setJoined(true);
+          })
+          .catch(() => {});
+      }
+    }
+  }, [loggedIn]);
+
+  useEffect(() => {
     searchDonors({ university: "Prime University", showUnavailable: true, pageSize: 100 })
       .then((res) => setDonors(res.items || []))
       .catch(() => setDonors([]))
