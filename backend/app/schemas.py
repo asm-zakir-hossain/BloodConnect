@@ -42,6 +42,16 @@ class RegisterRequest(CamelModel):
             raise ValueError("password and confirm_password do not match")
         return v
 
+    @field_validator("date_of_birth")
+    @classmethod
+    def minimum_age(cls, v: date | None) -> date | None:
+        if v is not None:
+            today = date.today()
+            cutoff = today.replace(year=today.year - 18)
+            if v > cutoff:
+                raise ValueError("You must be at least 18 years old to register")
+        return v
+
 
 class LoginRequest(CamelModel):
     email_or_phone: str

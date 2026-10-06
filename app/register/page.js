@@ -237,6 +237,16 @@ export default function RegisterPage() {
       }
     }
 
+    // Minimum age check (18+)
+    if (formData.dateOfBirth) {
+      const dob = new Date(formData.dateOfBirth);
+      const eighteenYearsAgo = new Date();
+      eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
+      if (isNaN(dob.getTime()) || dob > eighteenYearsAgo) {
+        newErrors.dateOfBirth = "You must be at least 18 years old to register";
+      }
+    }
+
     // Bangladesh phone format check (if provided)
     if (formData.phone.trim()) {
       const phoneRegex = /^(?:\+?88)?01[3-9]\d{8}$/;
