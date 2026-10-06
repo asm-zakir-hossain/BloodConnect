@@ -20,10 +20,34 @@
    - Less JavaScript sent to the browser = faster page load
    ============================================================ */
 
+"use client";
+
 import Link from "next/link";
 import styles from "./Hero.module.css";
 
+import { useSyncExternalStore } from "react";
+import { isLoggedIn } from "@/lib/auth";
+
+function subscribeToAuthChanges(callback) {
+  window.addEventListener("storage", callback);
+  window.addEventListener("auth-change", callback);
+  return () => {
+    window.removeEventListener("storage", callback);
+    window.removeEventListener("auth-change", callback);
+  };
+}
+
+function getServerAuthSnapshot() {
+  return false;
+}
+
+function useAuthLoggedIn() {
+  return useSyncExternalStore(subscribeToAuthChanges, isLoggedIn, getServerAuthSnapshot);
+}
+
+
 export default function Hero() {
+  const loggedIn = useAuthLoggedIn();
   return (
     /* 
       <section> — semantic HTML tag meaning "a thematic section"
@@ -101,9 +125,11 @@ export default function Hero() {
             </svg>
             Find a Donor
           </Link>
-          <Link href="/register" className={`btn btn-secondary btn-lg ${styles.ctaSecondary}`}>
-            Register as Donor
-          </Link>
+          {!loggedIn && (
+            <Link href="/register" className={`btn btn-secondary btn-lg ${styles.ctaSecondary}`}>
+              Register as Donor
+            </Link>
+          )}
         </div>
 
         {/* 

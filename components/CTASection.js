@@ -17,10 +17,34 @@
    to make it stand out from the regular white sections above it.
    ============================================================ */
 
+"use client";
+
 import Link from "next/link";
 import styles from "./CTASection.module.css";
 
+import { useSyncExternalStore } from "react";
+import { isLoggedIn } from "@/lib/auth";
+
+function subscribeToAuthChanges(callback) {
+  window.addEventListener("storage", callback);
+  window.addEventListener("auth-change", callback);
+  return () => {
+    window.removeEventListener("storage", callback);
+    window.removeEventListener("auth-change", callback);
+  };
+}
+
+function getServerAuthSnapshot() {
+  return false;
+}
+
+function useAuthLoggedIn() {
+  return useSyncExternalStore(subscribeToAuthChanges, isLoggedIn, getServerAuthSnapshot);
+}
+
+
 export default function CTASection() {
+  const loggedIn = useAuthLoggedIn();
   return (
     <section className={styles.section}>
       <div className="container">
@@ -46,9 +70,11 @@ export default function CTASection() {
               get discovered when someone needs your blood type.
             </p>
             <div className={styles.ctaButtons}>
-              <Link href="/register" className={`btn btn-primary btn-lg ${styles.ctaBtn}`}>
-                Register as Donor — It&apos;s Free
-              </Link>
+              {!loggedIn && (
+                <Link href="/register" className={`btn btn-primary btn-lg ${styles.ctaBtn}`}>
+                  Register as Donor — It&apos;s Free
+                </Link>
+              )}
               <Link href="/search" className={`btn btn-ghost btn-lg ${styles.ctaBtnSecondary}`}>
                 Or find a donor now →
               </Link>
