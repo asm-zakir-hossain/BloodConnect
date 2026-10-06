@@ -139,9 +139,11 @@ export default function Navbar() {
               Log In
             </Link>
           )}
-          <Link href="/register" className={`btn btn-primary ${styles.registerBtn}`}>
-            Register as Donor
-          </Link>
+          {!loggedIn && (
+            <Link href="/register" className={`btn btn-primary ${styles.registerBtn}`}>
+              Register as Donor
+            </Link>
+          )}
         </nav>
 
         {/* 
@@ -214,13 +216,15 @@ export default function Navbar() {
                   Log In
                 </Link>
               )}
-              <Link
-                href="/register"
-                className={`btn btn-primary btn-lg ${styles.mobileRegisterBtn}`}
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Register as Donor
-              </Link>
+              {!loggedIn && (
+                <Link
+                  href="/register"
+                  className={`btn btn-primary btn-lg ${styles.mobileRegisterBtn}`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Register as Donor
+                </Link>
+              )}
             </nav>
           </div>
         )}
