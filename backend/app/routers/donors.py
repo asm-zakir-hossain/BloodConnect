@@ -1,4 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
+from datetime import date, timedelta
+
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from app.crud import compute_availability, donor_to_private, donor_to_public
@@ -35,16 +38,18 @@ def search_donors(
     if university:
         query = query.filter(Donor.university.ilike(f"%{university}%"))
 
-    results = []
-    for donor in query.all():
-        is_available, _ = compute_availability(donor.last_donation_date)
-        if not show_unavailable and not is_available:
-            continue
-        results.append(donor_to_public(donor, reveal_phone=viewer is not None))
-    total = len(results)
+    if not show_unavailable:
+        cutoff = date.today() - timedelta(days=90)
+        query = query.filter(
+            or_(Donor.last_donation_date.is_(None), Donor.last_donation_date <= cutoff)
+        )
+
+    total = query.count()
     start = max(page - 1, 0) * page_size
+    donors = query.offset(start).limit(page_size).all()
+    results = [donor_to_public(d, reveal_phone=viewer is not None) for d in donors]
     return {
-        "items": results[start : start + page_size],
+        "items": results,
         "total": total,
         "page": page,
         "page_size": page_size,
