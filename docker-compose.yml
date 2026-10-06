@@ -1,5 +1,6 @@
 services:
   db:
+    restart: unless-stopped
     image: postgres:16-alpine
     environment:
       POSTGRES_USER: bloodconnect
@@ -33,8 +34,15 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
 
   frontend:
+    restart: unless-stopped
     build:
       context: .
       args:
@@ -45,6 +53,7 @@ services:
       - backend
 
   nginx:
+    restart: unless-stopped
     image: nginx:alpine
     ports:
       - "80:80"
