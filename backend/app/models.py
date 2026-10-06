@@ -32,6 +32,7 @@ class Donor(Base):
     last_donation_date: Mapped[date | None] = mapped_column(Date, nullable=True)
     total_donations: Mapped[int] = mapped_column(Integer, default=0)
 
+    role: Mapped[str] = mapped_column(String, default="donor")
     phone_visibility: Mapped[str] = mapped_column(String, default="public")
     is_verified: Mapped[bool] = mapped_column(Boolean, default=False)
 

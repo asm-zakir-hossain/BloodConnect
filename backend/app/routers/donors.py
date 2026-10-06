@@ -21,7 +21,7 @@ def search_donors(
     db: Session = Depends(get_db),
     viewer: Donor | None = Depends(get_optional_donor),
 ):
-    query = db.query(Donor)
+    query = db.query(Donor).filter(Donor.role == "donor")
     if blood_group and blood_group != "ALL":
         query = query.filter(Donor.blood_group == blood_group)
     if division:

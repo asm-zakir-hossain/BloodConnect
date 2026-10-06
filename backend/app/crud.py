@@ -23,6 +23,7 @@ def donor_to_public(donor: Donor, *, reveal_phone: bool) -> DonorPublic:
     return DonorPublic(
         id=donor.id,
         name=donor.name,
+        role=donor.role,
         phone=donor.phone if show_phone else None,
         blood_group=donor.blood_group,
         division=donor.division,
@@ -42,6 +43,7 @@ def donor_to_private(donor: Donor) -> DonorPrivate:
     return DonorPrivate(
         id=donor.id,
         name=donor.name,
+        role=donor.role,
         email=donor.email,
         phone=donor.phone,
         blood_group=donor.blood_group,
