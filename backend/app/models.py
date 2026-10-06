@@ -1,7 +1,7 @@
 import uuid
 from datetime import date, datetime
 
-from sqlalchemy import Boolean, Date, DateTime, Integer, String
+from sqlalchemy import Boolean, Date, DateTime, Index, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database import Base
@@ -38,3 +38,10 @@ class Donor(Base):
     is_verified: Mapped[bool] = mapped_column(Boolean, default=False)
 
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        Index("ix_donors_blood_group_division_district", "blood_group", "division", "district"),
+        Index("ix_donors_role", "role"),
+        Index("ix_donors_university", "university"),
+        Index("ix_donors_phone", "phone"),
+    )

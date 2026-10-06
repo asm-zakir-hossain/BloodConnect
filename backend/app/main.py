@@ -20,6 +20,18 @@ with engine.begin() as conn:
     except Exception:
         pass
 
+with engine.begin() as conn:
+    for stmt in [
+        "CREATE INDEX IF NOT EXISTS ix_donors_role ON donors (role)",
+        "CREATE INDEX IF NOT EXISTS ix_donors_university ON donors (university)",
+        "CREATE INDEX IF NOT EXISTS ix_donors_phone ON donors (phone)",
+        "CREATE INDEX IF NOT EXISTS ix_donors_blood_group_division_district ON donors (blood_group, division, district)",
+    ]:
+        try:
+            conn.execute(text(stmt))
+        except Exception:
+            pass
+
 app = FastAPI(title="BloodConnect API")
 
 app.add_middleware(
