@@ -191,8 +191,8 @@ export default function DonorDashboardPage() {
               and auto-start your 90-day recovery cooldown.
             </p>
 
-            {successMsg && <div className={styles.successBanner}>{successMsg}</div>}
-            {logError && <div className={styles.errorBanner}>{logError}</div>}
+            {successMsg && <div className={styles.successBanner} role="status">{successMsg}</div>}
+            {logError && <div className={styles.errorBanner} role="alert">{logError}</div>}
 
             <form onSubmit={handleLogDonation}>
               <div className={styles.formGroup}>
