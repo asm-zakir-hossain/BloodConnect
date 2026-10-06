@@ -20,7 +20,8 @@ class RegisterRequest(CamelModel):
     phone: str | None = None
     password: str = Field(min_length=8)
     confirm_password: str
-    blood_group: str
+    role: str = "donor"
+    blood_group: str | None = None
     division: str
     district: str
     area: str = ""
@@ -28,11 +29,19 @@ class RegisterRequest(CamelModel):
     gender: str | None = None
     last_donation_date: date | None = None
 
+    @field_validator("role")
+    @classmethod
+    def validate_role(cls, v: str) -> str:
+        if v not in {"donor", "recipient"}:
+            raise ValueError("role must be 'donor' or 'recipient'")
+        return v
+
     @field_validator("blood_group")
     @classmethod
-    def validate_blood_group(cls, v: str) -> str:
-        if v not in BLOOD_GROUPS:
-            raise ValueError(f"blood_group must be one of {sorted(BLOOD_GROUPS)}")
+    def validate_blood_group(cls, v: str | None, info) -> str | None:
+        if info.data.get("role", "donor") == "donor":
+            if v is None or v not in BLOOD_GROUPS:
+                raise ValueError(f"blood_group must be one of {sorted(BLOOD_GROUPS)}")
         return v
 
     @field_validator("confirm_password")
@@ -61,6 +70,7 @@ class LoginRequest(CamelModel):
 class DonorPublic(CamelModel):
     id: str
     name: str
+    role: str = "donor"
     phone: str | None = None
     blood_group: str
     division: str

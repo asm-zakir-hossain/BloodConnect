@@ -75,7 +75,7 @@ export default function LoginPage() {
         password: formData.password,
       });
       setSession(response.accessToken, response.donor);
-      router.push("/profile/me");
+      router.push(response.donor?.role === "recipient" ? "/search" : "/profile/me");
     } catch (error) {
       setErrors({ general: error.message || "Invalid email/phone or password." });
     } finally {

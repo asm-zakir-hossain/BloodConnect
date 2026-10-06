@@ -140,9 +140,14 @@ export default function Navbar() {
             </Link>
           )}
           {!loggedIn && (
-            <Link href="/register" className={`btn btn-primary ${styles.registerBtn}`}>
-              Register as Donor
-            </Link>
+            <>
+              <Link href="/register/recipient" className={styles.navLink}>
+                Register to Find Donors
+              </Link>
+              <Link href="/register" className={`btn btn-primary ${styles.registerBtn}`}>
+                Register as Donor
+              </Link>
+            </>
           )}
         </nav>
 
@@ -214,6 +219,15 @@ export default function Navbar() {
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Log In
+                </Link>
+              )}
+              {!loggedIn && (
+                <Link
+                  href="/register/recipient"
+                  className={styles.mobileNavLink}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Register to Find Donors
                 </Link>
               )}
               {!loggedIn && (

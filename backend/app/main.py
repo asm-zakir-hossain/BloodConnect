@@ -1,11 +1,19 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from sqlalchemy import text
+
 from app.config import settings
 from app.database import Base, engine
 from app.routers import auth, donors
 
 Base.metadata.create_all(bind=engine)
+
+with engine.begin() as conn:
+    try:
+        conn.execute(text("ALTER TABLE donors ADD COLUMN role VARCHAR DEFAULT 'donor'"))
+    except Exception:
+        pass
 
 app = FastAPI(title="BloodConnect API")
 

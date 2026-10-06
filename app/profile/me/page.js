@@ -44,7 +44,13 @@ export default function DonorDashboardPage() {
     }
 
     getMyProfile()
-      .then(setProfile)
+      .then((data) => {
+        if (data.role === "recipient") {
+          router.replace("/search");
+          return;
+        }
+        setProfile(data);
+      })
       .catch((err) => setLoadError(err.message || "Failed to load your profile."))
       .finally(() => setIsLoadingProfile(false));
   }, [router]);
