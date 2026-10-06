@@ -10,12 +10,14 @@ from app.schemas import DonorPrivate, DonorPublic, LogDonationRequest
 router = APIRouter(prefix="/api/donors", tags=["donors"])
 
 
-@router.get("/search", response_model=list[DonorPublic])
+@router.get("/search")
 def search_donors(
     blood_group: str | None = None,
     division: str | None = None,
     district: str | None = None,
     show_unavailable: bool = False,
+    page: int = 1,
+    page_size: int = 12,
     db: Session = Depends(get_db),
     viewer: Donor | None = Depends(get_optional_donor),
 ):
@@ -33,7 +35,15 @@ def search_donors(
         if not show_unavailable and not is_available:
             continue
         results.append(donor_to_public(donor, reveal_phone=viewer is not None))
-    return results
+    total = len(results)
+    start = max(page - 1, 0) * page_size
+    return {
+        "items": results[start : start + page_size],
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+        "total_pages": max((total + page_size - 1) // page_size, 1),
+    }
 
 
 @router.get("/me", response_model=DonorPrivate)
