@@ -28,6 +28,7 @@ class Donor(Base):
 
     date_of_birth: Mapped[date | None] = mapped_column(Date, nullable=True)
     gender: Mapped[str | None] = mapped_column(String, nullable=True)
+    university: Mapped[str | None] = mapped_column(String, nullable=True)
 
     last_donation_date: Mapped[date | None] = mapped_column(Date, nullable=True)
     total_donations: Mapped[int] = mapped_column(Integer, default=0)

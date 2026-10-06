@@ -118,6 +118,9 @@ export default function PublicProfilePage({ params }) {
                   </svg>
                   {donor.area}, {donor.district}, {donor.division}
                 </p>
+                {donor.university && (
+                  <p className={styles.locationText}>🎓 {donor.university}</p>
+                )}
               </div>
             </div>
 

@@ -27,6 +27,7 @@ class RegisterRequest(CamelModel):
     area: str = ""
     date_of_birth: date | None = None
     gender: str | None = None
+    university: str | None = None
     last_donation_date: date | None = None
 
     @field_validator("role")
@@ -76,6 +77,7 @@ class DonorPublic(CamelModel):
     division: str
     district: str
     area: str
+    university: str | None = None
     last_donation_date: date | None
     total_donations: int
     is_available: bool
