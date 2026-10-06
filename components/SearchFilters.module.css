@@ -142,3 +142,35 @@
   height: 16px;
   margin-top: 2px;
 }
+
+.suggestionWrap {
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.suggestionList {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  max-height: 180px;
+  overflow-y: auto;
+  z-index: 20;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.suggestionItem {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.suggestionItem:hover {
+  background: #f3f4f6;
+}
