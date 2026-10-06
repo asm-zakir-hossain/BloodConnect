@@ -67,6 +67,9 @@ export default function DonorCard({ donor }) {
           </svg>
           {donor.area}, {donor.district}, {donor.division}
         </p>
+        {donor.university && (
+          <p className={styles.locationInfo}>🎓 {donor.university}</p>
+        )}
 
         {/* Stats Row */}
         <div className={styles.metaRow}>

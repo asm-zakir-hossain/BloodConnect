@@ -118,6 +118,7 @@ export default function RegisterPage() {
     area: "",
     dateOfBirth: "",
     gender: "",
+    university: "",
     lastDonationDate: "",
   });
 
@@ -324,6 +325,7 @@ export default function RegisterPage() {
         area: formData.area,
         dateOfBirth: formData.dateOfBirth || undefined,
         gender: formData.gender || undefined,
+        university: formData.university || undefined,
         lastDonationDate: formData.lastDonationDate || undefined,
       });
       setSession(response.accessToken, response.donor);
@@ -446,6 +448,22 @@ export default function RegisterPage() {
                   Selected: {formatDateLong(formData.dateOfBirth)} — please confirm this is the correct day and month.
                 </span>
               )}
+            </div>
+
+            {/* University (optional) */}
+            <div className={styles.formGroup}>
+              <label htmlFor="university" className={styles.label}>
+                University (optional)
+              </label>
+              <input
+                type="text"
+                id="university"
+                name="university"
+                value={formData.university}
+                onChange={handleChange}
+                placeholder="e.g. Prime University"
+                className={styles.input}
+              />
             </div>
 
             {/* Gender */}

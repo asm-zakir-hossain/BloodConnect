@@ -14,6 +14,11 @@ with engine.begin() as conn:
         conn.execute(text("ALTER TABLE donors ADD COLUMN role VARCHAR DEFAULT 'donor'"))
     except Exception:
         pass
+with engine.begin() as conn:
+    try:
+        conn.execute(text("ALTER TABLE donors ADD COLUMN university VARCHAR"))
+    except Exception:
+        pass
 
 app = FastAPI(title="BloodConnect API")
 

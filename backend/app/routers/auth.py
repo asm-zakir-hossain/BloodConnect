@@ -38,6 +38,7 @@ def register(payload: RegisterRequest, db: Session = Depends(get_db)):
         area=payload.area,
         date_of_birth=payload.date_of_birth,
         gender=payload.gender,
+        university=payload.university,
         last_donation_date=payload.last_donation_date,
         total_donations=1 if payload.last_donation_date else 0,
         phone_visibility="public",
