@@ -72,14 +72,32 @@ export default function SearchFilters({
         <label htmlFor="search-division" className={styles.filterLabel}>
           Division
         </label>
-        <input
-          type="text"
-          placeholder="Type to search divisions..."
-          value={divisionQuery}
-          onChange={(e) => setDivisionQuery(e.target.value)}
-          className={styles.selectInput}
-          aria-label="Search divisions"
-        />
+        <div className={styles.suggestionWrap}>
+          <input
+            type="text"
+            placeholder="Type to search divisions..."
+            value={divisionQuery}
+            onChange={(e) => setDivisionQuery(e.target.value)}
+            className={styles.selectInput}
+            aria-label="Search divisions"
+          />
+          {divisionQuery && (
+            <ul className={styles.suggestionList}>
+              {filteredDivisions.map((div) => (
+                <li
+                  key={div}
+                  className={styles.suggestionItem}
+                  onClick={() => {
+                    onFilterChange("division", div);
+                    setDivisionQuery("");
+                  }}
+                >
+                  {div}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
         <select
           id="search-division"
           value={filters.division}
@@ -100,17 +118,35 @@ export default function SearchFilters({
         <label htmlFor="search-district" className={styles.filterLabel}>
           District
         </label>
-        <input
-          type="text"
-          placeholder="Type to search districts..."
-          value={districtQuery}
-          onChange={(e) => setDistrictQuery(e.target.value)}
-          disabled={!filters.division}
-          className={`${styles.selectInput} ${
-            !filters.division ? styles.selectDisabled : ""
-          }`}
-          aria-label="Search districts"
-        />
+        <div className={styles.suggestionWrap}>
+          <input
+            type="text"
+            placeholder="Type to search districts..."
+            value={districtQuery}
+            onChange={(e) => setDistrictQuery(e.target.value)}
+            disabled={!filters.division}
+            className={`${styles.selectInput} ${
+              !filters.division ? styles.selectDisabled : ""
+            }`}
+            aria-label="Search districts"
+          />
+          {districtQuery && (
+            <ul className={styles.suggestionList}>
+              {filteredDistricts.map((dist) => (
+                <li
+                  key={dist}
+                  className={styles.suggestionItem}
+                  onClick={() => {
+                    onFilterChange("district", dist);
+                    setDistrictQuery("");
+                  }}
+                >
+                  {dist}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
         <select
           id="search-district"
           value={filters.district}
