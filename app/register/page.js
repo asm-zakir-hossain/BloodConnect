@@ -48,6 +48,7 @@ import styles from "./register.module.css";
 */
 import { divisions, getDistrictsByDivision } from "@/data/locations";
 import { registerUser } from "@/lib/api";
+import { formatDateLong } from "@/lib/formatDate";
 import { setSession } from "@/lib/auth";
 
 /*
@@ -438,6 +439,11 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 className={styles.input}
               />
+              {formData.dateOfBirth && (
+                <span className={styles.helpText}>
+                  Selected: {formatDateLong(formData.dateOfBirth)} — please confirm this is the correct day and month.
+                </span>
+              )}
             </div>
 
             {/* Gender */}
@@ -613,6 +619,11 @@ export default function RegisterPage() {
                 If you&apos;ve donated before, enter the date. We&apos;ll calculate your eligibility 
                 (90-day cooldown rule).
               </span>
+              {formData.lastDonationDate && (
+                <span className={styles.helpText}>
+                  Selected: {formatDateLong(formData.lastDonationDate)} — please confirm this is the correct day and month.
+                </span>
+              )}
             </div>
           </div>
 

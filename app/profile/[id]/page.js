@@ -17,6 +17,7 @@ import { useState, useEffect, use } from "react";
 import Link from "next/link";
 import { getDonorProfile } from "@/lib/api";
 import styles from "./profile.module.css";
+import { formatDateLong } from "@/lib/formatDate";
 
 export default function PublicProfilePage({ params }) {
   // Unwrap params using React.use() or await params in client/server components
@@ -147,7 +148,7 @@ export default function PublicProfilePage({ params }) {
             </div>
             <div className={styles.metricCard}>
               <span className={styles.metricValue}>
-                {donor.lastDonationDate || "None logged"}
+                {donor.lastDonationDate ? formatDateLong(donor.lastDonationDate) : "None logged"}
               </span>
               <span className={styles.metricLabel}>Last Donated</span>
             </div>

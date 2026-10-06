@@ -21,6 +21,7 @@ import Link from "next/link";
 import styles from "./dashboard.module.css";
 import { getMyProfile, logDonation } from "@/lib/api";
 import { isLoggedIn, clearSession } from "@/lib/auth";
+import { formatDateLong } from "@/lib/formatDate";
 
 export default function DonorDashboardPage() {
   const router = useRouter();
@@ -208,6 +209,11 @@ export default function DonorDashboardPage() {
                   required
                   className={styles.input}
                 />
+                {donationDateInput && (
+                  <span className={styles.helpText}>
+                    Selected: {formatDateLong(donationDateInput)} — please confirm this is the correct day and month.
+                  </span>
+                )}
               </div>
 
               <div className={styles.formGroup}>
@@ -244,7 +250,7 @@ export default function DonorDashboardPage() {
               </div>
               <div className={styles.statBox}>
                 <span className={styles.statNumber}>
-                  {profile.lastDonationDate || "N/A"}
+                  {profile.lastDonationDate ? formatDateLong(profile.lastDonationDate) : "N/A"}
                 </span>
                 <span className={styles.statLabel}>Last Donated</span>
               </div>
@@ -262,9 +268,9 @@ export default function DonorDashboardPage() {
       {profile && (
         <div className={styles.donationToast} role="status">
           {profile.lastDonationDate ? (
-            <>You last donated blood on <strong>{profile.lastDonationDate}</strong>.
+            <>You last donated blood on <strong>{formatDateLong(profile.lastDonationDate)}</strong>.
             {profile.nextEligibleDate
-              ? ` Next eligible: ${profile.nextEligibleDate}.`
+              ? ` Next eligible: ${formatDateLong(profile.nextEligibleDate)}.`
               : " You are eligible to donate again."}</>
           ) : (
             "You haven't logged a blood donation yet. Log your first donation below!"

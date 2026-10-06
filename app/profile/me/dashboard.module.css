@@ -252,3 +252,10 @@
   max-width: 90%;
   text-align: center;
 }
+
+.helpText {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: #6b7280;
+}

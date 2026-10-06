@@ -15,6 +15,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import styles from "./DonorCard.module.css";
+import { formatDateLong } from "@/lib/formatDate";
 
 export default function DonorCard({ donor }) {
   /*
@@ -74,7 +75,7 @@ export default function DonorCard({ donor }) {
           </span>
           {donor.lastDonationDate && (
             <span className={styles.metaItem}>
-              Last: {donor.lastDonationDate}
+              Last: {formatDateLong(donor.lastDonationDate)}
             </span>
           )}
         </div>
