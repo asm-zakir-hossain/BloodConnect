@@ -2,12 +2,16 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { searchDonors } from "@/lib/api";
+import { searchDonors, updateMyProfile, getMyProfile } from "@/lib/api";
+import { isLoggedIn, getStoredDonor, setSession } from "@/lib/auth";
 
 export default function PrimeUniversityCommunity({ styles }) {
   const [donors, setDonors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
+  const [joined, setJoined] = useState(false);
+  const [joinError, setJoinError] = useState("");
+  const loggedIn = isLoggedIn();
 
   useEffect(() => {
     searchDonors({ university: "Prime University", showUnavailable: true, pageSize: 100 })
@@ -60,12 +64,43 @@ export default function PrimeUniversityCommunity({ styles }) {
         <h2>Community Statistics</h2>
         <p><strong>{donors.length}</strong> registered Prime University users</p>
         <p><strong>{availableCount}</strong> currently available to donate</p>
-        <p style={{ marginTop: "16px" }}>
-          Prime University student?{" "}
-          <Link href="/register" className="btn btn-primary">
-            Register and add your university
-          </Link>
-        </p>
+        <div style={{ marginTop: "16px" }}>
+          {loggedIn ? (
+            joined ? (
+              <p><strong>You&apos;re listed as a Prime University student.</strong></p>
+            ) : (
+              <>
+                <p>Are you a Prime University student?</p>
+                <button
+                  className="btn btn-primary"
+                  onClick={async () => {
+                    try {
+                      await updateMyProfile({ university: "Prime University" });
+                      const updated = await getMyProfile();
+                      const donor = getStoredDonor();
+                      if (donor) setSession(localStorage.getItem("bloodconnect_token"), updated);
+                      setJoined(true);
+                      const res = await searchDonors({ university: "Prime University", showUnavailable: true, pageSize: 100 });
+                      setDonors(res.items || []);
+                    } catch (err) {
+                      setJoinError(err.message || "Failed to update profile");
+                    }
+                  }}
+                >
+                  Yes, I&apos;m a Prime University student
+                </button>
+                {joinError && <p role="alert">{joinError}</p>}
+              </>
+            )
+          ) : (
+            <p>
+              Prime University student?{" "}
+              <Link href="/register" className="btn btn-primary">
+                Register and add your university
+              </Link>
+            </p>
+          )}
+        </div>
       </section>
     </div>
   );

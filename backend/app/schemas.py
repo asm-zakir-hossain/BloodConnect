@@ -96,6 +96,15 @@ class AuthResponse(CamelModel):
     donor: DonorPrivate
 
 
+class UpdateProfileRequest(CamelModel):
+    university: str | None = None
+    area: str | None = None
+    division: str | None = None
+    district: str | None = None
+    gender: str | None = None
+    phone_visibility: str | None = None
+
+
 class LogDonationRequest(CamelModel):
     donation_date: date
     location_note: str | None = None

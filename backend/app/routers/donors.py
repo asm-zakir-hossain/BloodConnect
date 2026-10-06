@@ -5,7 +5,7 @@ from app.crud import compute_availability, donor_to_private, donor_to_public
 from app.database import get_db
 from app.deps import get_current_donor, get_optional_donor
 from app.models import Donor
-from app.schemas import DonorPrivate, DonorPublic, LogDonationRequest
+from app.schemas import DonorPrivate, DonorPublic, LogDonationRequest, UpdateProfileRequest
 
 router = APIRouter(prefix="/api/donors", tags=["donors"])
 
@@ -67,6 +67,19 @@ def get_donor(
     if not donor:
         raise HTTPException(status_code=404, detail="Donor not found")
     return donor_to_public(donor, reveal_phone=viewer is not None)
+
+
+@router.patch("/me", response_model=DonorPrivate)
+def update_my_profile(
+    payload: UpdateProfileRequest,
+    db: Session = Depends(get_db),
+    current: Donor = Depends(get_current_donor),
+):
+    for field, value in payload.model_dump(exclude_unset=True).items():
+        setattr(current, field, value)
+    db.commit()
+    db.refresh(current)
+    return donor_to_private(current)
 
 
 @router.post("/me/log-donation", response_model=DonorPrivate)
