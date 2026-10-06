@@ -31,6 +31,7 @@ function SearchContent() {
     bloodGroup: urlBloodGroup,
     division: "",
     district: "",
+    area: "",
     showUnavailable: false,
   });
 
@@ -96,6 +97,7 @@ function SearchContent() {
       bloodGroup: "ALL",
       division: "",
       district: "",
+      area: "",
       showUnavailable: false,
     });
   };

@@ -101,6 +101,21 @@ export default function SearchFilters({
         </select>
       </div>
 
+      {/* ---- 3b. AREA TEXT INPUT ---- */}
+      <div className={styles.filterGroup}>
+        <label htmlFor="search-area" className={styles.filterLabel}>
+          Area
+        </label>
+        <input
+          id="search-area"
+          type="text"
+          value={filters.area || ""}
+          onChange={(e) => onFilterChange("area", e.target.value)}
+          placeholder="e.g. Mirpur 10"
+          className={styles.selectInput}
+        />
+      </div>
+
       {/* ---- 4. TOGGLE UNAVAILABLE DONORS ---- */}
       <div className={styles.toggleGroup}>
         <label className={styles.checkboxLabel}>
