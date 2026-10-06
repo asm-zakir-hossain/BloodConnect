@@ -13,6 +13,17 @@ services:
       timeout: 5s
       retries: 5
 
+  seed:
+    build: ./backend
+    command: python seed.py
+    environment:
+      DATABASE_URL: postgresql+psycopg2://bloodconnect:bloodconnect@db:5432/bloodconnect
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:?Set JWT_SECRET_KEY in the environment or .env}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+
   backend:
     build: ./backend
     environment:
