@@ -1,0 +1,8 @@
+node_modules
+.next
+.git
+bloodconnect
+backend/__pycache__
+**/__pycache__
+*.db
+.env
