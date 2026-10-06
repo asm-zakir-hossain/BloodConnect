@@ -130,6 +130,9 @@ export default function Navbar() {
           <Link href="/about" className={styles.navLink}>
             How It Works
           </Link>
+          <Link href="/prime-university" className={styles.navLink}>
+            Community
+          </Link>
           {loggedIn ? (
             <Link href="/profile/me" className={styles.navLink}>
               My Dashboard
@@ -200,6 +203,13 @@ export default function Navbar() {
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 How It Works
+              </Link>
+              <Link
+                href="/prime-university"
+                className={styles.mobileNavLink}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Community
               </Link>
               {loggedIn ? (
                 <Link
