@@ -15,6 +15,7 @@ def search_donors(
     blood_group: str | None = None,
     division: str | None = None,
     district: str | None = None,
+    area: str | None = None,
     show_unavailable: bool = False,
     page: int = 1,
     page_size: int = 12,
@@ -28,6 +29,8 @@ def search_donors(
         query = query.filter(Donor.division == division)
     if district:
         query = query.filter(Donor.district == district)
+    if area:
+        query = query.filter(Donor.area.ilike(f"%{area}%"))
 
     results = []
     for donor in query.all():

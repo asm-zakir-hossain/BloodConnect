@@ -115,6 +115,7 @@ export default function RegisterPage() {
     bloodGroup: "",
     division: "",
     district: "",
+    area: "",
     dateOfBirth: "",
     gender: "",
     lastDonationDate: "",
@@ -320,6 +321,7 @@ export default function RegisterPage() {
         bloodGroup: formData.bloodGroup,
         division: formData.division,
         district: formData.district,
+        area: formData.area,
         dateOfBirth: formData.dateOfBirth || undefined,
         gender: formData.gender || undefined,
         lastDonationDate: formData.lastDonationDate || undefined,
@@ -702,6 +704,22 @@ export default function RegisterPage() {
               {errors.district && (
                 <span className={styles.errorText}>{errors.district}</span>
               )}
+            </div>
+
+            {/* Area (optional) */}
+            <div className={styles.formGroup}>
+              <label htmlFor="area" className={styles.label}>
+                Area / Neighborhood
+              </label>
+              <input
+                type="text"
+                id="area"
+                name="area"
+                value={formData.area}
+                onChange={handleChange}
+                placeholder="e.g. Mirpur 10"
+                className={styles.input}
+              />
             </div>
           </div>
 
