@@ -38,8 +38,8 @@ export default function SearchFilters({
 
       {/* ---- 1. BLOOD GROUP SELECTOR ---- */}
       <div className={styles.filterGroup}>
-        <label className={styles.filterLabel}>Blood Group</label>
-        <div className={styles.bloodChipGrid}>
+        <span className={styles.filterLabel} id="blood-group-label">Blood Group</span>
+        <div className={styles.bloodChipGrid} role="group" aria-labelledby="blood-group-label">
           {BLOOD_GROUPS.map((group) => (
             <button
               key={group}
@@ -48,6 +48,7 @@ export default function SearchFilters({
                 filters.bloodGroup === group ? styles.chipActive : ""
               }`}
               onClick={() => onFilterChange("bloodGroup", group)}
+              aria-pressed={filters.bloodGroup === group}
             >
               {group}
             </button>

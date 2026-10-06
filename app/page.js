@@ -44,6 +44,7 @@ import BloodGroupSearch from "@/components/BloodGroupSearch";
 import HowItWorks from "@/components/HowItWorks";
 import Stats from "@/components/Stats";
 import CTASection from "@/components/CTASection";
+import PrimeSpotlight from "@/components/PrimeSpotlight";
 
 /*
   📚 IMPORT PATHS — WHAT DOES "@/" MEAN?
@@ -78,6 +79,7 @@ export default function Home() {
       <BloodGroupSearch />
       <HowItWorks />
       <Stats />
+      <PrimeSpotlight />
       <CTASection />
     </>
   );

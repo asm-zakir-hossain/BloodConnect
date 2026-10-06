@@ -50,14 +50,18 @@ function SearchContent() {
   const [donors, setDonors] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState({ total: 0, totalPages: 1 });
 
   useEffect(() => {
     let cancelled = false;
+    setIsLoading(true);
 
-    searchDonors(filters)
-      .then((results) => {
+    searchDonors({ ...filters, page, pageSize: 12 })
+      .then((result) => {
         if (cancelled) return;
-        setDonors(results);
+        setDonors(result.items);
+        setPagination({ total: result.total, totalPages: result.total_pages });
         setError("");
       })
       .catch((err) => {
@@ -70,10 +74,11 @@ function SearchContent() {
     return () => {
       cancelled = true;
     };
-  }, [filters]);
+  }, [filters, page]);
 
   /* Handle filter updates */
   const handleFilterChange = (key, value) => {
+    setPage(1);
     setFilters((prev) => {
       const updated = { ...prev, [key]: value };
       // If division changes, clear district
@@ -86,6 +91,7 @@ function SearchContent() {
 
   /* Reset filters */
   const handleReset = () => {
+    setPage(1);
     setFilters({
       bloodGroup: "ALL",
       division: "",
@@ -117,7 +123,8 @@ function SearchContent() {
                   "Loading donors..."
                 ) : (
                   <>
-                    Showing <strong>{donors.length}</strong> matching{" "}
+                    Showing <strong>{donors.length}</strong> of{" "}
+                    <strong>{pagination.total}</strong> matching{" "}
                     {donors.length === 1 ? "donor" : "donors"}
                     {filters.bloodGroup !== "ALL" && (
                       <span> for <strong>{filters.bloodGroup}</strong></span>
@@ -139,11 +146,34 @@ function SearchContent() {
           {/* Donor Cards Grid or Empty State */}
           {!isLoading && !error && (
             donors.length > 0 ? (
-              <div className={styles.donorGrid}>
-                {donors.map((donor) => (
-                  <DonorCard key={donor.id} donor={donor} />
-                ))}
-              </div>
+              <>
+                <div className={styles.donorGrid}>
+                  {donors.map((donor) => (
+                    <DonorCard key={donor.id} donor={donor} />
+                  ))}
+                </div>
+                {pagination.totalPages > 1 && (
+                  <nav className={styles.pagination} aria-label="Search results pages">
+                    <button
+                      className="btn btn-secondary btn-sm"
+                      disabled={page <= 1}
+                      onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    >
+                      Previous
+                    </button>
+                    <span className={styles.pageIndicator}>
+                      Page {page} of {pagination.totalPages}
+                    </span>
+                    <button
+                      className="btn btn-secondary btn-sm"
+                      disabled={page >= pagination.totalPages}
+                      onClick={() => setPage((p) => Math.min(pagination.totalPages, p + 1))}
+                    >
+                      Next
+                    </button>
+                  </nav>
+                )}
+              </>
             ) : (
               <div className={styles.emptyState}>
                 <div className={styles.emptyIcon}>

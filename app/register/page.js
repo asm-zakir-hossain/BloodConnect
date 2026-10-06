@@ -57,6 +57,36 @@ import { setSession } from "@/lib/auth";
 */
 const BLOOD_GROUPS = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
+function getPasswordStrength(password) {
+  let score = 0;
+  if (password.length >= 8) score++;
+  if (password.length >= 12) score++;
+  if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;
+  if (/\d/.test(password)) score++;
+  if (/[^A-Za-z0-9]/.test(password)) score++;
+  if (score <= 1) return { label: "Weak", level: 1 };
+  if (score <= 2) return { label: "Fair", level: 2 };
+  if (score <= 3) return { label: "Good", level: 3 };
+  return { label: "Strong", level: 4 };
+}
+
+function PasswordStrength({ password }) {
+  const { label, level } = getPasswordStrength(password);
+  return (
+    <div className={styles.strengthWrapper} aria-live="polite">
+      <div className={styles.strengthBars}>
+        {[1, 2, 3, 4].map((n) => (
+          <span
+            key={n}
+            className={`${styles.strengthBar} ${n <= level ? styles[`strength${level}`] : ""}`}
+          />
+        ))}
+      </div>
+      <span className={styles.strengthLabel}>Password strength: {label}</span>
+    </div>
+  );
+}
+
 export default function RegisterPage() {
   /* ---- FORM STATE ----
     One state object holds ALL form field values.
@@ -217,6 +247,15 @@ export default function RegisterPage() {
       }
     }
 
+    // Bangladesh phone format check (if provided)
+    if (formData.phone.trim()) {
+      const phoneRegex = /^(?:\+?88)?01[3-9]\d{8}$/;
+      if (!phoneRegex.test(formData.phone.replace(/[\s-]/g, ""))) {
+        newErrors.phone =
+          "Please enter a valid Bangladeshi phone number (e.g. 01711002233)";
+      }
+    }
+
     // Password checks
     if (!formData.password) {
       newErrors.password = "Password is required";
@@ -344,7 +383,7 @@ export default function RegisterPage() {
 
         {/* ---- GENERAL ERROR MESSAGE ---- */}
         {errors.general && (
-          <div className={styles.errorBanner}>{errors.general}</div>
+          <div className={styles.errorBanner} role="alert">{errors.general}</div>
         )}
 
         {/* 
@@ -483,6 +522,9 @@ export default function RegisterPage() {
                 className={`${styles.input} ${errors.password ? styles.inputError : ""}`}
               />
               {errors.password && <span className={styles.errorText}>{errors.password}</span>}
+              {formData.password && (
+                <PasswordStrength password={formData.password} />
+              )}
             </div>
 
             {/* Confirm Password */}

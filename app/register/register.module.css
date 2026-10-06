@@ -393,3 +393,31 @@
     font-size: var(--font-size-xl);
   }
 }
+
+/* ---- PASSWORD STRENGTH INDICATOR ---- */
+.strengthWrapper {
+  margin-top: var(--space-2);
+}
+
+.strengthBars {
+  display: flex;
+  gap: var(--space-1);
+  margin-bottom: var(--space-1);
+}
+
+.strengthBar {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border-light);
+}
+
+.strength1 { background: #e53e3e; }
+.strength2 { background: #dd6b20; }
+.strength3 { background: #d69e2e; }
+.strength4 { background: #38a169; }
+
+.strengthLabel {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+}
