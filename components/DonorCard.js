@@ -53,10 +53,6 @@ export default function DonorCard({ donor }) {
       <div className={styles.cardBody}>
         <div className={styles.nameRow}>
           <h3 className={styles.donorName}>{donor.name}</h3>
-          {/* Per updated PRD: phone & email unverified badge */}
-          <span className={styles.unverifiedBadge} title="Phone not verified via OTP">
-            Unverified
-          </span>
         </div>
 
         {/* Location Info */}

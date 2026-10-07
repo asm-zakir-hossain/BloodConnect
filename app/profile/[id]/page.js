@@ -107,9 +107,6 @@ export default function PublicProfilePage({ params }) {
               <div>
                 <div className={styles.nameRow}>
                   <h1 className={styles.donorName}>{donor.name}</h1>
-                  <span className={styles.unverifiedTag} title="Unverified identity (PRD 5.5)">
-                    Unverified
-                  </span>
                 </div>
                 <p className={styles.locationText}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
