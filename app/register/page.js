@@ -356,10 +356,6 @@ export default function RegisterPage() {
             Your profile is now <strong>live</strong> and searchable. 
             Donors in need of your blood type can now find you.
           </p>
-          <p className={styles.successNote}>
-            Your profile is marked as &quot;Unverified&quot; until you complete 
-            optional verification steps.
-          </p>
           <div className={styles.successActions}>
             <Link href="/search" className="btn btn-primary btn-lg">
               Find Donors
