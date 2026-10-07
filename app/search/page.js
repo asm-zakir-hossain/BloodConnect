@@ -53,6 +53,7 @@ function SearchContent() {
   const [error, setError] = useState("");
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState({ total: 0, totalPages: 1 });
+  const [view, setView] = useState("list");
 
   const [debouncedArea, setDebouncedArea] = useState(filters.area);
 
