@@ -16,7 +16,7 @@ services:
 
   seed:
     build: ./backend
-    command: python seed.py
+    command: sh -c "python seed.py && python seed_prime.py"
     environment:
       DATABASE_URL: postgresql+psycopg2://bloodconnect:bloodconnect@db:5432/bloodconnect
       JWT_SECRET_KEY: ${JWT_SECRET_KEY:?Set JWT_SECRET_KEY in the environment or .env}
