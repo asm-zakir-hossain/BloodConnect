@@ -63,12 +63,14 @@ export default function PrimeUniversityCommunity({ styles }) {
         {loading ? (
           <p>Loading...</p>
         ) : visible.length === 0 ? (
-          <p>No Prime University students found.</p>
-        <p style={{ marginTop: "8px" }}>
-          <Link href="/register" className="btn btn-primary btn-sm">
-            Be the first to register
-          </Link>
-        </p>
+          <>
+            <p>No Prime University students found.</p>
+            <p style={{ marginTop: "8px" }}>
+              <Link href="/register" className="btn btn-primary btn-sm">
+                Be the first to register
+              </Link>
+            </p>
+          </>
         ) : (
           <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
             {visible.map((d) => (
