@@ -279,7 +279,7 @@ export default function DonorDashboardPage() {
               ? ` Next eligible: ${formatDateLong(profile.nextEligibleDate)}.`
               : " You are eligible to donate again."}</>
           ) : (
-            "You haven't logged a blood donation yet. Log your first donation below!"
+            "You haven't logged a blood donation yet. Log your first donation below, or find where to donate near you!"
           )}
         </div>
       )}
