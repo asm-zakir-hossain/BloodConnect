@@ -20,6 +20,9 @@ import { useSearchParams } from "next/navigation";
 import SearchFilters from "@/components/SearchFilters";
 import DonorCard from "@/components/DonorCard";
 import { searchDonors } from "@/lib/api";
+import dynamic from "next/dynamic";
+
+const DonorMap = dynamic(() => import("@/components/DonorMap"), { ssr: false });
 import styles from "./search.module.css";
 
 function SearchContent() {
@@ -54,6 +57,7 @@ function SearchContent() {
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState({ total: 0, totalPages: 1 });
   const [view, setView] = useState("list");
+
 
   const [debouncedArea, setDebouncedArea] = useState(filters.area);
 
