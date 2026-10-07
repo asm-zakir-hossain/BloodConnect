@@ -121,6 +121,25 @@ export default function PublicProfilePage({ params }) {
                 {donor.university && (
                   <p className={styles.locationText}>🎓 {donor.university}</p>
                 )}
+                <div style={{ marginTop: "12px", display: "flex", gap: "8px" }}>
+                  <button
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => {
+                      navigator.clipboard.writeText(window.location.href);
+                      alert("Profile link copied!");
+                    }}
+                  >
+                    Copy Profile Link
+                  </button>
+                  <a
+                    className="btn btn-primary btn-sm"
+                    href={`https://wa.me/?text=${encodeURIComponent(`${donor.name} — ${donor.bloodGroup} donor on BloodConnect: ${typeof window !== "undefined" ? window.location.href : ""}`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Share on WhatsApp
+                  </a>
+                </div>
               </div>
             </div>
 
