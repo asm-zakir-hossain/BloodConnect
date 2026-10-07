@@ -153,8 +153,21 @@ function SearchContent() {
             </div>
           )}
 
-          {/* Donor Cards Grid or Empty State */}
-          {!isLoading && !error && (
+          {/* List / Map toggle */}
+          <div style={{ marginBottom: "1rem" }}>
+            <button
+              onClick={() => setView(view === "list" ? "map" : "list")}
+              className="btn btn-secondary btn-sm"
+            >
+              {view === "list" ? "Show Map View" : "Show List View"}
+            </button>
+          </div>
+
+          {/* Donor Cards Grid or Map or Empty State */}
+          {!isLoading && !error && view === "map" && donors.length > 0 && (
+            <DonorMap donors={donors} />
+          )}
+          {!isLoading && !error && view === "list" && (
             donors.length > 0 ? (
               <>
                 <div className={styles.donorGrid}>
