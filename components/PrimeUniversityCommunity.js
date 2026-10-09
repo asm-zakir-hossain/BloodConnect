@@ -9,8 +9,10 @@ export default function PrimeUniversityCommunity({ styles }) {
   const [donors, setDonors] = useState([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [query, setQuery] = useState("");
+  const [bloodGroupFilter, setBloodGroupFilter] = useState("ALL");
   const [showAll, setShowAll] = useState(false);
+
+  const BLOOD_GROUPS = ["ALL", "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
   const [joined, setJoined] = useState(false);
   const [joinError, setJoinError] = useState("");
   const loggedIn = isLoggedIn();
@@ -48,10 +50,10 @@ export default function PrimeUniversityCommunity({ styles }) {
 
   const visible = useMemo(
     () =>
-      donors.filter((d) =>
-        d.name.toLowerCase().includes(query.toLowerCase())
-      ),
-    [donors, query]
+      bloodGroupFilter === "ALL"
+        ? donors
+        : donors.filter((d) => d.bloodGroup === bloodGroupFilter),
+    [donors, bloodGroupFilter]
   );
 
   const DISPLAY_LIMIT = 50;
@@ -60,14 +62,18 @@ export default function PrimeUniversityCommunity({ styles }) {
   return (
     <div className={styles.grid}>
       <section className={styles.card}>
-        <h2>Find Prime University Students</h2>
-        <input
-          type="text"
-          placeholder="Search students by name..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+        <h2>Find Prime University Students by Blood Group</h2>
+        <select
+          value={bloodGroupFilter}
+          onChange={(e) => { setBloodGroupFilter(e.target.value); setShowAll(false); }}
           style={{ width: "100%", padding: "8px 12px", marginBottom: "12px", borderRadius: "8px", border: "1px solid #e5e7eb" }}
-        />
+        >
+          {BLOOD_GROUPS.map((bg) => (
+            <option key={bg} value={bg}>
+              {bg === "ALL" ? "All Blood Groups" : bg}
+            </option>
+          ))}
+        </select>
         {loading ? (
           <p>Loading...</p>
         ) : visible.length === 0 ? (
