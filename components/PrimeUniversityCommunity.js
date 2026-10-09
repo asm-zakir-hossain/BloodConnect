@@ -90,7 +90,10 @@ export default function PrimeUniversityCommunity({ styles }) {
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
               {displayed.map((d) => (
                 <li key={d.id} style={{ padding: "8px 0", borderBottom: "1px solid #f3f4f6" }}>
-                  <strong>{d.name}</strong> — {d.bloodGroup}, {d.area ? `${d.area}, ` : ""}{d.district}
+                  <Link href={`/profile/${d.id}`} style={{ color: "var(--primary)", textDecoration: "none", fontWeight: 700 }}>
+                    {d.name}
+                  </Link>{" "}
+                  — {d.bloodGroup}, {d.area ? `${d.area}, ` : ""}{d.district}
                   {d.isAvailable ? "" : " (unavailable)"}
                 </li>
               ))}
