@@ -19,9 +19,12 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./dashboard.module.css";
-import { getMyProfile, logDonation } from "@/lib/api";
-import { isLoggedIn, clearSession } from "@/lib/auth";
+import { getMyProfile, logDonation, updateMyProfile } from "@/lib/api";
+import { isLoggedIn, clearSession, setSession } from "@/lib/auth";
 import { formatDateLong } from "@/lib/formatDate";
+import { divisions, getDistrictsByDivision } from "@/data/locations";
+
+const BLOOD_GROUPS = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
 export default function DonorDashboardPage() {
   const router = useRouter();
@@ -35,6 +38,13 @@ export default function DonorDashboardPage() {
   const [isLogging, setIsLogging] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
   const [logError, setLogError] = useState("");
+
+  /* ---- EDIT PERSONAL INFORMATION STATE ---- */
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [editForm, setEditForm] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [editSuccess, setEditSuccess] = useState("");
+  const [editError, setEditError] = useState("");
 
   /* ---- LOAD THE LOGGED-IN DONOR'S PROFILE ---- */
   useEffect(() => {
@@ -82,6 +92,60 @@ export default function DonorDashboardPage() {
       setLogError(err.message || "Failed to log donation. Please try again.");
     } finally {
       setIsLogging(false);
+    }
+  };
+
+  /* ---- OPEN EDIT FORM WITH CURRENT PROFILE ---- */
+  const openEditForm = () => {
+    setEditForm({
+      name: profile.name || "",
+      email: profile.email || "",
+      phone: profile.phone || "",
+      bloodGroup: profile.bloodGroup || "",
+      division: profile.division || "",
+      district: profile.district || "",
+      area: profile.area || "",
+      dateOfBirth: profile.dateOfBirth || "",
+      gender: profile.gender || "",
+      university: profile.university || "",
+      phoneVisibility: profile.phoneVisibility || "public",
+    });
+    setEditSuccess("");
+    setEditError("");
+    setShowEditForm(true);
+  };
+
+  /* ---- SAVE PERSONAL INFORMATION ---- */
+  const handleSaveProfile = async (e) => {
+    e.preventDefault();
+    setIsSaving(true);
+    setEditError("");
+    try {
+      const updated = await updateMyProfile({
+        name: editForm.name,
+        email: editForm.email || undefined,
+        phone: editForm.phone || undefined,
+        bloodGroup: editForm.bloodGroup || undefined,
+        division: editForm.division,
+        district: editForm.district,
+        area: editForm.area,
+        dateOfBirth: editForm.dateOfBirth || undefined,
+        gender: editForm.gender || undefined,
+        university: editForm.university || undefined,
+        phoneVisibility: editForm.phoneVisibility,
+      });
+      setProfile(updated);
+      const token = typeof window !== "undefined" ? localStorage.getItem("bloodconnect_token") : null;
+      if (token) setSession(token, updated);
+      setEditSuccess("Personal information updated successfully!");
+      setTimeout(() => {
+        setShowEditForm(false);
+        setEditSuccess("");
+      }, 2000);
+    } catch (err) {
+      setEditError(err.message || "Failed to update profile.");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -142,6 +206,12 @@ export default function DonorDashboardPage() {
             <Link href={`/profile/${profile.id}`} className="btn btn-secondary btn-sm">
               View Public Profile
             </Link>
+            <button
+              onClick={() => (showEditForm ? setShowEditForm(false) : openEditForm())}
+              className="btn btn-primary btn-sm"
+            >
+              {showEditForm ? "Cancel" : "Edit Profile"}
+            </button>
             <button onClick={handleLogOut} className="btn btn-ghost btn-sm">
               Log Out
             </button>
@@ -182,6 +252,172 @@ export default function DonorDashboardPage() {
             </div>
           )}
         </div>
+
+        {/* ---- EDIT PERSONAL INFORMATION FORM ---- */}
+        {showEditForm && editForm && (
+          <div className={styles.formCard} style={{ marginBottom: "var(--space-8)" }}>
+            <h3 className={styles.cardTitle}>Edit Personal Information</h3>
+            <p className={styles.cardDesc}>
+              Update any of your personal details below. Changes take effect immediately.
+            </p>
+
+            {editSuccess && <div className={styles.successBanner} role="status">{editSuccess}</div>}
+            {editError && <div className={styles.errorBanner} role="alert">{editError}</div>}
+
+            <form onSubmit={handleSaveProfile}>
+              <div className={styles.gridContainer}>
+                <div className={styles.formGroup}>
+                  <label htmlFor="editName" className={styles.label}>Full Name</label>
+                  <input
+                    id="editName"
+                    type="text"
+                    value={editForm.name}
+                    onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                    className={styles.input}
+                    required
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="editEmail" className={styles.label}>Email</label>
+                  <input
+                    id="editEmail"
+                    type="email"
+                    value={editForm.email}
+                    onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                    className={styles.input}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="editPhone" className={styles.label}>Phone Number</label>
+                  <input
+                    id="editPhone"
+                    type="tel"
+                    value={editForm.phone}
+                    onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
+                    className={styles.input}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="editBloodGroup" className={styles.label}>Blood Group</label>
+                  <select
+                    id="editBloodGroup"
+                    value={editForm.bloodGroup}
+                    onChange={(e) => setEditForm({ ...editForm, bloodGroup: e.target.value })}
+                    className={styles.input}
+                  >
+                    <option value="">Select blood group</option>
+                    {BLOOD_GROUPS.map((bg) => (
+                      <option key={bg} value={bg}>{bg}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="editDivision" className={styles.label}>Division</label>
+                  <select
+                    id="editDivision"
+                    value={editForm.division}
+                    onChange={(e) => setEditForm({ ...editForm, division: e.target.value, district: "" })}
+                    className={styles.input}
+                  >
+                    <option value="">Select division</option>
+                    {divisions.map((d) => (
+                      <option key={d} value={d}>{d}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="editDistrict" className={styles.label}>District</label>
+                  <select
+                    id="editDistrict"
+                    value={editForm.district}
+                    onChange={(e) => setEditForm({ ...editForm, district: e.target.value })}
+                    className={styles.input}
+                  >
+                    <option value="">Select district</option>
+                    {getDistrictsByDivision(editForm.division).map((d) => (
+                      <option key={d} value={d}>{d}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="editArea" className={styles.label}>Area / Address</label>
+                  <input
+                    id="editArea"
+                    type="text"
+                    value={editForm.area}
+                    onChange={(e) => setEditForm({ ...editForm, area: e.target.value })}
+                    className={styles.input}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="editDob" className={styles.label}>Date of Birth</label>
+                  <input
+                    id="editDob"
+                    type="date"
+                    value={editForm.dateOfBirth}
+                    onChange={(e) => setEditForm({ ...editForm, dateOfBirth: e.target.value })}
+                    className={styles.input}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="editGender" className={styles.label}>Gender</label>
+                  <select
+                    id="editGender"
+                    value={editForm.gender}
+                    onChange={(e) => setEditForm({ ...editForm, gender: e.target.value })}
+                    className={styles.input}
+                  >
+                    <option value="">Prefer not to say</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="editUniversity" className={styles.label}>University</label>
+                  <input
+                    id="editUniversity"
+                    type="text"
+                    value={editForm.university}
+                    onChange={(e) => setEditForm({ ...editForm, university: e.target.value })}
+                    className={styles.input}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="editPhoneVisibility" className={styles.label}>Phone Visibility</label>
+                  <select
+                    id="editPhoneVisibility"
+                    value={editForm.phoneVisibility}
+                    onChange={(e) => setEditForm({ ...editForm, phoneVisibility: e.target.value })}
+                    className={styles.input}
+                  >
+                    <option value="public">Public — visible to everyone</option>
+                    <option value="logged_in_only">Logged-in users only</option>
+                  </select>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className={`btn btn-primary ${styles.submitBtn}`}
+                disabled={isSaving}
+                style={{ marginTop: "var(--space-4)" }}
+              >
+                {isSaving ? "Saving..." : "Save Changes"}
+              </button>
+            </form>
+          </div>
+        )}
 
         {/* ---- LOG DONATION FORM & HISTORY GRID ---- */}
         <div className={styles.gridContainer}>

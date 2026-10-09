@@ -80,7 +80,23 @@ def update_my_profile(
     db: Session = Depends(get_db),
     current: Donor = Depends(get_current_donor),
 ):
-    for field, value in payload.model_dump(exclude_unset=True).items():
+    data = payload.model_dump(exclude_unset=True)
+
+    if "email" in data and data["email"]:
+        existing = db.query(Donor).filter(
+            Donor.email == data["email"], Donor.id != current.id
+        ).first()
+        if existing:
+            raise HTTPException(status_code=409, detail="Email already in use")
+
+    if "phone" in data and data["phone"]:
+        existing = db.query(Donor).filter(
+            Donor.phone == data["phone"], Donor.id != current.id
+        ).first()
+        if existing:
+            raise HTTPException(status_code=409, detail="Phone number already in use")
+
+    for field, value in data.items():
         setattr(current, field, value)
     db.commit()
     db.refresh(current)

@@ -101,3 +101,51 @@ def test_log_donation_sets_cooldown(client):
     donor = res.json()
     assert donor["isAvailable"] is False
     assert donor["nextEligibleDate"] is not None
+
+
+def test_update_profile_changes_name_and_blood_group(client):
+    login = client.post(
+        "/api/auth/login",
+        json={"emailOrPhone": "test@example.com", "password": "securepassword1"},
+    ).json()
+    headers = {"Authorization": f"Bearer {login['accessToken']}"}
+    res = client.patch(
+        "/api/donors/me",
+        json={"name": "Updated Name", "bloodGroup": "A+", "phoneVisibility": "logged_in_only"},
+        headers=headers,
+    )
+    assert res.status_code == 200
+    assert res.json()["name"] == "Updated Name"
+    assert res.json()["bloodGroup"] == "A+"
+
+
+def test_update_profile_rejects_invalid_blood_group(client):
+    login = client.post(
+        "/api/auth/login",
+        json={"emailOrPhone": "test@example.com", "password": "securepassword1"},
+    ).json()
+    headers = {"Authorization": f"Bearer {login['accessToken']}"}
+    res = client.patch(
+        "/api/donors/me",
+        json={"bloodGroup": "C+"},
+        headers=headers,
+    )
+    assert res.status_code == 422
+
+
+def test_update_profile_rejects_duplicate_phone(client):
+    client.post(
+        "/api/auth/register",
+        json=register_payload(name="Other", email="other@example.com", phone="01800000001"),
+    )
+    login = client.post(
+        "/api/auth/login",
+        json={"emailOrPhone": "test@example.com", "password": "securepassword1"},
+    ).json()
+    headers = {"Authorization": f"Bearer {login['accessToken']}"}
+    res = client.patch(
+        "/api/donors/me",
+        json={"phone": "01800000001"},
+        headers=headers,
+    )
+    assert res.status_code == 409

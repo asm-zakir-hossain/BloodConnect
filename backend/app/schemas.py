@@ -97,12 +97,34 @@ class AuthResponse(CamelModel):
 
 
 class UpdateProfileRequest(CamelModel):
-    university: str | None = None
-    area: str | None = None
+    name: str | None = None
+    email: EmailStr | None = None
+    phone: str | None = None
+    blood_group: str | None = None
     division: str | None = None
     district: str | None = None
+    area: str | None = None
+    date_of_birth: date | None = None
     gender: str | None = None
+    university: str | None = None
     phone_visibility: str | None = None
+
+    @field_validator("blood_group")
+    @classmethod
+    def validate_blood_group(cls, v: str | None) -> str | None:
+        if v is not None and v not in BLOOD_GROUPS:
+            raise ValueError(f"blood_group must be one of {sorted(BLOOD_GROUPS)}")
+        return v
+
+    @field_validator("date_of_birth")
+    @classmethod
+    def minimum_age(cls, v: date | None) -> date | None:
+        if v is not None:
+            today = date.today()
+            cutoff = today.replace(year=today.year - 18)
+            if v > cutoff:
+                raise ValueError("You must be at least 18 years old")
+        return v
 
 
 class LogDonationRequest(CamelModel):
